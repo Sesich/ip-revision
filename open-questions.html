@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSE1100 Open Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: grouped topic index on the left, one reading column; each topic ends in a framed model answer. */
+:root {
+  --bg: #f4f6fb; --surface: #ffffff; --surface-2: #eaeef7; --ink: #121a2f; --muted: #556079; --line: #d6dcea;
+  --accent: #1f4aa8; --accent-soft: #e2e9fa;
+  --model: #1a3f8f; --model-bg: #f7f9ff; --model-line: #b9c8ee;
+  --bgnote: #0e6656; --bgnote-bg: #e4f3ef; --bgnote-line: #c3e3da;
+  --avoid: #a33a12; --pts-bg: #fff8ee; --pts-line: #f0dcc0; --pts-ink: #8f4510;
+  --code-bg: #eef1f8; --tk-kw: #1f4aa8; --tk-str: #17703f; --tk-num: #8f4510; --tk-com: #6d7590; --tk-fn: #6b35a8; --tk-cls: #9c1f62;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-read: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1220; --surface: #141a2c; --surface-2: #1a2137; --ink: #e6e9f3; --muted: #9ea7c0; --line: #29304a;
+  --accent: #8eaefc; --accent-soft: #1b2849;
+  --model: #a9c0ff; --model-bg: #111a33; --model-line: #2d3f70;
+  --bgnote: #72d6c0; --bgnote-bg: #10261f; --bgnote-line: #1f4338;
+  --avoid: #ff9f7a; --pts-bg: #261d12; --pts-line: #44331d; --pts-ink: #f0b07a;
+  --code-bg: #10162a; --tk-kw: #8eaefc; --tk-str: #7fd6a1; --tk-num: #f0b07a; --tk-com: #7c85a3; --tk-fn: #d3a5ff; --tk-cls: #ff9bcd;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0d1220; --surface: #141a2c; --surface-2: #1a2137; --ink: #e6e9f3; --muted: #9ea7c0; --line: #29304a;
+  --accent: #8eaefc; --accent-soft: #1b2849;
+  --model: #a9c0ff; --model-bg: #111a33; --model-line: #2d3f70;
+  --bgnote: #72d6c0; --bgnote-bg: #10261f; --bgnote-line: #1f4338;
+  --avoid: #ff9f7a; --pts-bg: #261d12; --pts-line: #44331d; --pts-ink: #f0b07a;
+  --code-bg: #10162a; --tk-kw: #8eaefc; --tk-str: #7fd6a1; --tk-num: #f0b07a; --tk-com: #7c85a3; --tk-fn: #d3a5ff; --tk-cls: #ff9bcd;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 40px; }
+@media (max-width: 940px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; } .side { display: none; } }
+.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto; padding: 28px 4px 24px 0; font-size: 0.86rem; }
+.side ul { list-style: none; margin: 0; padding: 0; }
+.nav-group { font-family: var(--f-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 14px 0 4px; }
+.nav-group ul { font-family: var(--f-body); font-weight: 400; font-size: 0.86rem; letter-spacing: 0; text-transform: none; margin-top: 4px; }
+.nav-group a { display: block; padding: 3px 8px; border-radius: 6px; color: var(--ink); text-decoration: none; line-height: 1.35; }
+.nav-group a:hover { background: var(--surface-2); }
+.nav-group code { font-size: 0.85em; }
+.mobile-nav { display: none; margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+@media (max-width: 940px) { .mobile-nav { display: block; } }
+.mobile-nav summary { cursor: pointer; padding: 10px 14px; font-weight: 600; }
+.mobile-nav > ul { padding: 0 14px 10px; list-style: none; margin: 0; }
+main { min-width: 0; }
+.hero { padding: 34px 0 6px; max-width: 800px; }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+h1 { font-family: var(--f-display); font-size: clamp(2rem, 4.8vw, 2.9rem); line-height: 1.05; margin: 0 0 10px; letter-spacing: -0.01em; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0 0 14px; max-width: 64ch; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+.links a { text-decoration: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 0.86rem; font-weight: 500; }
+.how { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px 12px; margin: 20px 0 0; max-width: 800px; }
+.how h2 { font-family: var(--f-display); font-size: 1.25rem; margin: 14px 0 6px; }
+.how ol { padding-left: 1.3em; margin: 6px 0; }
+.group { max-width: 800px; padding-top: 30px; }
+.group > h2 { font-family: var(--f-display); font-size: clamp(1.5rem, 3.4vw, 2rem); margin: 10px 0 0; padding-bottom: 6px; border-bottom: 2px solid var(--accent); }
+.topic { padding: 22px 0 26px; border-bottom: 1px solid var(--line); scroll-margin-top: 12px; }
+.topic h3 { font-family: var(--f-display); font-size: 1.32rem; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+.asks { margin: 0 0 10px; color: var(--muted); font-size: 0.92rem; }
+.asks .lbl { display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+.asks q { font-style: italic; }
+.explain p, .explain li { max-width: 68ch; }
+.points { background: var(--pts-bg); border: 1px solid var(--pts-line); border-radius: 10px; padding: 2px 16px 8px; margin: 14px 0; }
+.points h4, .model h4 { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 12px 0 4px; }
+.points h4 { color: var(--pts-ink); }
+.points ul { margin: 4px 0; padding-left: 1.2em; }
+.points li { margin: 3px 0; }
+.bg { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; background: var(--bgnote-bg); border: 1px solid var(--bgnote-line); border-radius: 10px; padding: 8px 12px; margin: 12px 0; font-size: 0.95rem; }
+.bg-tag { font-weight: 700; font-size: 0.72rem; color: var(--bgnote); border: 1px solid var(--bgnote); border-radius: 4px; padding: 0 4px; margin-top: 3px; }
+.model { background: var(--model-bg); border: 1px solid var(--model-line); border-radius: 12px; padding: 2px 20px 8px; margin: 14px 0 8px; }
+.model-head { display: flex; align-items: baseline; gap: 10px; }
+.model h4 { color: var(--model); }
+.wc { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; margin-left: auto; }
+.model p { font-family: var(--f-read); font-size: 1.04rem; line-height: 1.65; max-width: 68ch; }
+.avoid { color: var(--avoid); font-size: 0.92rem; margin: 6px 0 0; }
+code { font-family: var(--f-mono); font-size: 0.86em; background: var(--surface-2); padding: 0.05em 0.3em; border-radius: 4px; overflow-wrap: anywhere; }
+.model code { font-size: 0.8em; }
+pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; margin: 12px 0; line-height: 1.5; }
+pre code { background: none; padding: 0; font-size: 0.82rem; white-space: pre; overflow-wrap: normal; color: var(--ink); }
+.token.keyword, .token.boolean { color: var(--tk-kw); font-weight: 600; }
+.token.string, .token.char { color: var(--tk-str); } .token.number { color: var(--tk-num); }
+.token.comment { color: var(--tk-com); font-style: italic; } .token.function { color: var(--tk-fn); }
+.token.class-name, .token.annotation { color: var(--tk-cls); } .token.operator, .token.punctuation { color: var(--muted); }
+.tbl { overflow-x: auto; margin: 12px 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 6px 10px; border-bottom: 1px solid var(--line); }
+th { background: var(--surface-2); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td code, th code { overflow-wrap: break-word; }
+footer { max-width: 1180px; margin: 48px auto 0; color: var(--muted); font-size: 0.84rem; border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="side" aria-label="Topics"><ul><li class="nav-group">Functional Java<ul><li><a href="#t-paradigms">Imperative vs declarative (functional) programming</a></li><li><a href="#t-lambdas">Lambda expressions, functional interfaces, method references</a></li><li><a href="#t-streams">Streams, laziness, intermediate vs terminal</a></li><li><a href="#t-optional">Optional</a></li></ul></li><li class="nav-group">Threads<ul><li><a href="#t-process-thread">Processes vs threads</a></li><li><a href="#t-concurrency">Concurrency vs parallelism, scheduling, Heisenbugs</a></li><li><a href="#t-start-threads">Starting threads: Runnable, start vs run, platform vs virtual</a></li><li><a href="#t-race">Race conditions and synchronized</a></li><li><a href="#t-deadlock">Deadlock</a></li></ul></li><li class="nav-group">Object-oriented concepts<ul><li><a href="#t-binding">Static vs dynamic binding</a></li><li><a href="#t-inheritance">Inheritance and the Liskov Substitution Principle</a></li><li><a href="#t-types-casting">Declared vs actual type, casting</a></li><li><a href="#t-abstract-interface">Abstract classes vs interfaces</a></li><li><a href="#t-composition">Composition vs inheritance (attribute vs subclass)</a></li><li><a href="#t-encapsulation">Encapsulation and access modifiers</a></li><li><a href="#t-static">static (the Practice Exam I question)</a></li><li><a href="#t-sealed">sealed (the Practice Exam II question)</a></li><li><a href="#t-records">Records and immutability</a></li></ul></li><li class="nav-group">Equality, generics, memory<ul><li><a href="#t-equals-contract">The equals contract; getClass vs instanceof</a></li><li><a href="#t-hashcode">hashCode and hash-based collections</a></li><li><a href="#t-generics">Generics and type erasure</a></li><li><a href="#t-autoboxing">Autoboxing and wrapper classes</a></li><li><a href="#t-memory">Stack, heap and pass by value</a></li></ul></li><li class="nav-group">Exceptions<ul><li><a href="#t-checked">Errors, checked and unchecked exceptions</a></li><li><a href="#t-exceptions-design">Exceptions vs error codes; finally; own exception classes</a></li></ul></li><li class="nav-group">Input / output<ul><li><a href="#t-readers">Readers vs streams, Scanner vs BufferedReader, buffering</a></li><li><a href="#t-serial">Saving objects: DataOutputStream vs Serializable</a></li></ul></li><li class="nav-group">Testing, quality and tools<ul><li><a href="#t-unit-testing">Unit testing principles</a></li><li><a href="#t-cc">Cyclomatic complexity</a></li><li><a href="#t-quality-review">Code quality and code review</a></li><li><a href="#t-git">Version control and Git</a></li><li><a href="#t-libraries">Libraries vs frameworks; debugging</a></li></ul></li><li class="nav-group">Modern Java<ul><li><a href="#t-var">var: should you use it?</a></li><li><a href="#t-enum-switch">Enums and switch expressions</a></li><li><a href="#t-comparable">Comparable vs Comparator</a></li></ul></li></ul></aside>
+  <main>
+    <header class="hero">
+      <p class="eyebrow">Introduction to Programming · TU Delft · Endterm bonus</p>
+      <h1>Open questions: every topic, with a model answer</h1>
+      <p class="lede">35 topics that can come up as an open question. Each one has a deeper explanation, the points a grader
+      checks, a short Bulgarian summary, and a model answer under 250 words that you can learn the structure of.</p>
+      <div class="links"><a href="index.html">Full version with quizzes</a><a href="cheat-sheet.html">Compact cheat sheet</a></div>
+      <details class="mobile-nav"><summary>Jump to a topic</summary><ul><li class="nav-group">Functional Java<ul><li><a href="#t-paradigms">Imperative vs declarative (functional) programming</a></li><li><a href="#t-lambdas">Lambda expressions, functional interfaces, method references</a></li><li><a href="#t-streams">Streams, laziness, intermediate vs terminal</a></li><li><a href="#t-optional">Optional</a></li></ul></li><li class="nav-group">Threads<ul><li><a href="#t-process-thread">Processes vs threads</a></li><li><a href="#t-concurrency">Concurrency vs parallelism, scheduling, Heisenbugs</a></li><li><a href="#t-start-threads">Starting threads: Runnable, start vs run, platform vs virtual</a></li><li><a href="#t-race">Race conditions and synchronized</a></li><li><a href="#t-deadlock">Deadlock</a></li></ul></li><li class="nav-group">Object-oriented concepts<ul><li><a href="#t-binding">Static vs dynamic binding</a></li><li><a href="#t-inheritance">Inheritance and the Liskov Substitution Principle</a></li><li><a href="#t-types-casting">Declared vs actual type, casting</a></li><li><a href="#t-abstract-interface">Abstract classes vs interfaces</a></li><li><a href="#t-composition">Composition vs inheritance (attribute vs subclass)</a></li><li><a href="#t-encapsulation">Encapsulation and access modifiers</a></li><li><a href="#t-static">static (the Practice Exam I question)</a></li><li><a href="#t-sealed">sealed (the Practice Exam II question)</a></li><li><a href="#t-records">Records and immutability</a></li></ul></li><li class="nav-group">Equality, generics, memory<ul><li><a href="#t-equals-contract">The equals contract; getClass vs instanceof</a></li><li><a href="#t-hashcode">hashCode and hash-based collections</a></li><li><a href="#t-generics">Generics and type erasure</a></li><li><a href="#t-autoboxing">Autoboxing and wrapper classes</a></li><li><a href="#t-memory">Stack, heap and pass by value</a></li></ul></li><li class="nav-group">Exceptions<ul><li><a href="#t-checked">Errors, checked and unchecked exceptions</a></li><li><a href="#t-exceptions-design">Exceptions vs error codes; finally; own exception classes</a></li></ul></li><li class="nav-group">Input / output<ul><li><a href="#t-readers">Readers vs streams, Scanner vs BufferedReader, buffering</a></li><li><a href="#t-serial">Saving objects: DataOutputStream vs Serializable</a></li></ul></li><li class="nav-group">Testing, quality and tools<ul><li><a href="#t-unit-testing">Unit testing principles</a></li><li><a href="#t-cc">Cyclomatic complexity</a></li><li><a href="#t-quality-review">Code quality and code review</a></li><li><a href="#t-git">Version control and Git</a></li><li><a href="#t-libraries">Libraries vs frameworks; debugging</a></li></ul></li><li class="nav-group">Modern Java<ul><li><a href="#t-var">var: should you use it?</a></li><li><a href="#t-enum-switch">Enums and switch expressions</a></li><li><a href="#t-comparable">Comparable vs Comparator</a></li></ul></li></ul></details>
+    </header>
+    <div class="how">
+      <h2>How open questions are graded</h2>
+      <p>The practice exam rubrics award points per required idea (for example 1.0 + 0.75 + 0.75) and <strong>take points off
+for wrong claims</strong> (−0.5). Answers must stay under 250 words. A safe structure:</p>
+<ol>
+<li><strong>Define</strong> the concept precisely, using the course's terms (checked/unchecked, declared/actual type, compile time/runtime).</li>
+<li><strong>Explain how it works</strong>, with a one-line example or a tiny code fragment.</li>
+<li><strong>Answer every sub-question</strong> literally: "is it possible?", "is it required to compile, and why?", "why is it desirable?".</li>
+<li><strong>Stop.</strong> Don't add extra claims you're not sure about; a wrong extra sentence can cost points.</li>
+</ol>
+      <p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Отговаряй на всяка подточка от въпроса поотделно. Грешно твърдение отнема точки, дори останалото да е вярно — затова не добавяй неща, в които не си сигурен.</span></p>
+    </div>
+    <section class="group" id="functional"><h2>Functional Java</h2><article class="topic" id="t-paradigms"><h3>Imperative vs declarative (functional) programming</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain the difference between imperative and declarative programming.</q> · <q>Why would you use functional programming in Java?</q></p><div class="explain"><p>A language can't be optimal for every use; it trades off speed vs ease of use, reliability vs flexibility,
+simplicity vs power. The lecture names three paradigms:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Paradigm</th>
+<th>A program is…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Imperative</td>
+<td>a sequence of statements that change data, step by step</td>
+</tr>
+<tr>
+<td>Object-oriented</td>
+<td>objects with state, changed through their methods</td>
+</tr>
+<tr>
+<td>Functional</td>
+<td>functions; data is immutable and state is avoided</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Imperative</strong> code tells the computer <em>how</em>: you write the loop, the condition and where to store the result.
+<strong>Declarative</strong> code says <em>what</em> you want: <code>filter(&gt; 5) input</code> in Haskell, <code>input.stream().filter(x -&gt; x &gt; 5)</code>
+in Java. Java is mainly imperative/OO but has functional elements since Java 8 (lambdas, streams).</p></div><div class="points"><h4>What graders look for</h4><ul><li>Imperative = describe <strong>how</strong>, step by step, with changing state</li><li>Declarative/functional = describe <strong>what</strong>; functions, immutable data, no state</li><li>Example of both (loop with <code>if</code> + <code>add</code> vs <code>filter</code>)</li><li>Benefits: easier to run in parallel, more concise/readable, more flexible, easier to test</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Императивно = казваш <strong>как</strong> (цикъл, if, add). Декларативно/функционално = казваш <strong>какво</strong> искаш (filter). Функционалният стил е по-лесен за паралелизиране, по-кратък и по-лесен за тестване.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">185 words</span></div><p>In imperative programming a program is a sequence of statements that tell the computer step by step how to
+compute a result, changing variables (state) along the way. For example, to keep the numbers greater than 5 you
+create an empty list, loop over the input, check each element with an if-statement and add it to the result.</p>
+<p>In declarative programming, of which functional programming is a form, you describe what you want instead of
+how to get it. A functional program consists of functions; data is immutable and state is avoided. In Java the
+same example becomes <code>input.stream().filter(x -&gt; x &gt; 5).toList()</code>: you only state the condition, and the
+library takes care of the loop and the result list.</p>
+<p>Functional programming is useful because pure functions without side effects are easier to run in parallel,
+the code is often shorter and more readable, behaviour can be passed around as a parameter (more flexible),
+and functions that always give the same output for the same input are easier to test. Java is not purely
+functional, but since Java 8 it supports this style with lambdas and streams.</p></div><p class="avoid"><strong>Avoid:</strong> Don't claim Java is a functional language; it is OO with functional elements.</p></article><article class="topic" id="t-lambdas"><h3>Lambda expressions, functional interfaces, method references</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is a lambda expression and how do you use one in Java?</q> · <q>Explain what a functional interface is.</q> · <q>What is a method reference?</q></p><div class="explain"><p>A lambda is an anonymous function, from lambda calculus: <code>λx. x + 1</code> becomes <code>x -&gt; x + 1</code>, <code>λx.λy. x + y</code>
+becomes <code>(x, y) -&gt; x + y</code>. Java needs a type to store it in: a <strong>functional interface</strong>, an interface with
+exactly one abstract method. The lambda becomes the implementation of that method.</p>
+<pre><code class="language-java">Function&lt;Integer, Integer&gt; increment = x -&gt; x + 1;      increment.apply(5);   // 6
+BiFunction&lt;Integer, Integer, Integer&gt; add = (x, y) -&gt; x + y;  add.apply(3, 4); // 7
+Predicate&lt;Integer&gt; greaterThan5 = x -&gt; x &gt; 5;           greaterThan5.test(6); // true
+Supplier&lt;Integer&gt; four = () -&gt; 4;                       four.get();           // 4
+filter(input, x -&gt; x &gt; 5);                // behaviour passed as a parameter
+filter(input, MyPredicates::greaterThan5); // method reference to an existing method
+</code></pre>
+<p>Local variables used inside a lambda must be effectively final. <code>Runnable</code> and <code>Comparator</code> are functional
+interfaces too, so <code>Thread.ofVirtual().start(() -&gt; …)</code> works.</p></div><div class="points"><h4>What graders look for</h4><ul><li>A lambda is an anonymous function: parameters <code>-&gt;</code> body</li><li>It is stored in / passed as a <strong>functional interface</strong> (one abstract method), e.g. <code>Function</code>, <code>Predicate</code>, <code>Supplier</code></li><li>Called through the interface method (<code>apply</code>, <code>test</code>, <code>get</code>)</li><li>Lets you pass behaviour as a parameter (e.g. a filter condition)</li><li>Method reference <code>Class::method</code> = short form of a lambda that only calls that method</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Ламбдата е функция без име. В Java тя винаги има тип — функционален интерфейс с точно един абстрактен метод (<code>Function</code>, <code>Predicate</code>…), и се извиква чрез него (<code>apply</code>, <code>test</code>). Така подаваш поведение като параметър.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">176 words</span></div><p>A lambda expression is an anonymous function: a short piece of behaviour without a name, written as parameters,
+an arrow and a body, for example <code>x -&gt; x + 1</code> or <code>(x, y) -&gt; x + y</code>. It comes from lambda calculus, where the
+increment function is written as λx. x + 1.</p>
+<p>In Java a lambda always has the type of a functional interface: an interface with exactly one abstract method,
+such as <code>Function&lt;T, R&gt;</code> (method <code>apply</code>), <code>Predicate&lt;T&gt;</code> (<code>test</code>), <code>Supplier&lt;T&gt;</code> (<code>get</code>) or <code>Runnable</code>
+(<code>run</code>). The lambda is the implementation of that method. For example,
+<code>Predicate&lt;Integer&gt; greaterThan5 = x -&gt; x &gt; 5;</code> can be called with <code>greaterThan5.test(6)</code>, which returns true.</p>
+<p>The main use is passing behaviour as a parameter. A method <code>filter(List&lt;Integer&gt; input, Predicate&lt;Integer&gt; condition)</code>
+can be reused with any condition: <code>filter(input, x -&gt; x &gt; 5)</code> or <code>filter(input, x -&gt; x % 2 == 0)</code>. Streams use
+this everywhere (<code>filter</code>, <code>map</code>, <code>sorted</code>).</p>
+<p>When a lambda only calls an existing method, you can use a method reference instead, such as
+<code>MyPredicates::greaterThan5</code> or <code>Person::getName</code>. Lambdas should be pure: no side effects, same output for the
+same input.</p></div><p class="avoid"><strong>Avoid:</strong> Don't call a lambda directly like <code>increment(5)</code>; you call <code>increment.apply(5)</code>.</p></article><article class="topic" id="t-streams"><h3>Streams, laziness, intermediate vs terminal</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain how a stream pipeline works.</q> · <q>What does it mean that intermediate operations are lazy?</q> · <q>Why can a stream only be used once?</q></p><div class="explain"><p>A pipeline has a <strong>source</strong> (a collection, array, range, file lines, or an infinite generator), <strong>zero or
+more intermediate operations</strong> (<code>filter</code>, <code>map</code>, <code>distinct</code>, <code>sorted</code>, <code>limit</code>, <code>skip</code>), each returning a new
+stream, and <strong>one terminal operation</strong> (<code>toList</code>, <code>count</code>, <code>sum</code>, <code>findFirst</code>, <code>anyMatch</code>, <code>forEach</code>) that
+produces a result or side effect and closes the stream.</p>
+<p>Intermediate operations are <strong>lazy</strong>: they only describe the work. Nothing runs until the terminal operation.
+That is why <code>IntStream.iterate(0, i -&gt; i + 2).limit(3).sum()</code> works on an infinite stream, and why
+<code>findFirst</code> can stop early. A stream can be traversed <strong>once</strong>; a second terminal operation throws
+<code>IllegalStateException</code>. Operations should be pure functions (don't change variables outside the stream).</p></div><div class="points"><h4>What graders look for</h4><ul><li>Source → 0+ intermediate operations → 1 terminal operation</li><li>Intermediate operations return a stream and are <strong>lazy</strong>; only the terminal operation executes the pipeline</li><li>Laziness allows infinite streams with <code>limit</code> and early stopping (<code>findFirst</code>, <code>anyMatch</code>)</li><li>A stream can be traversed only once (<code>IllegalStateException</code>)</li><li>Use pure functions; declarative alternative to loops</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Междинните операции (filter, map…) са „мързеливи“ — само описват работата. Нищо не се изпълнява до терминалната операция (toList, count…). Стриймът се ползва само веднъж.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">186 words</span></div><p>A stream is a sequence of elements that is processed in a pipeline. The pipeline starts with a source, for
+example <code>list.stream()</code>, <code>Arrays.stream(array)</code>, <code>IntStream.range(0, 4)</code> or the lines of a file. Then come zero
+or more intermediate operations such as <code>filter</code>, <code>map</code>, <code>distinct</code>, <code>sorted</code> or <code>limit</code>. Each of these returns
+a new stream. The pipeline ends with exactly one terminal operation, such as <code>toList</code>, <code>count</code>, <code>sum</code>,
+<code>findFirst</code> or <code>anyMatch</code>, which produces the result.</p>
+<p>Intermediate operations are lazy: they only describe what should happen and do not process any element. The
+work is done only when a terminal operation is called. Without a terminal operation nothing happens at all.
+Laziness makes it possible to work with infinite streams, such as <code>IntStream.iterate(0, i -&gt; i + 2).limit(3)</code>,
+and lets operations like <code>findFirst</code> stop as soon as they have an answer.</p>
+<p>After the terminal operation the stream is consumed: a stream can be traversed only once, and using it again
+throws an <code>IllegalStateException</code>. The functions passed to a stream should be pure, so they don't change
+variables outside the stream. This makes stream code declarative and easier to parallelize than loops.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say <code>filter</code> or <code>map</code> alone produce a result; without a terminal operation nothing runs.</p></article><article class="topic" id="t-optional"><h3>Optional</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What problem does <code>Optional</code> solve and how do you use it?</q></p><div class="explain"><p><code>person.getCar().getColor()</code> throws a <code>NullPointerException</code> when there is no car. A null check works but is easy
+to forget. <code>Optional&lt;Car&gt;</code> is a container that either holds a value or is empty, so the type itself says "this
+may be missing".</p>
+<pre><code class="language-java">private Optional&lt;Car&gt; car = Optional.empty();      // or Optional.of(car)
+String color = person.getCar().map(Car::getColor).orElse(&quot;none&quot;);
+</code></pre>
+<p>Stream operations that may find nothing return an Optional: <code>findFirst()</code>, <code>max()</code>, <code>min()</code>, <code>average()</code>
+(<code>OptionalDouble</code>).</p></div><div class="points"><h4>What graders look for</h4><ul><li>Container that holds a value or is empty</li><li>Avoids <code>NullPointerException</code> from forgotten null checks</li><li>Forces the programmer to handle the empty case</li><li><code>Optional.of</code> / <code>empty</code>, <code>map</code>, <code>orElse</code>, <code>isPresent</code></li><li>Returned by stream operations like <code>findFirst</code>, <code>max</code></li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg"><code>Optional</code> е кутия — или съдържа стойност, или е празна. Така типът показва, че стойността може да липсва, и си принуден да обработиш празния случай (<code>orElse</code>) вместо да получиш NullPointerException.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">159 words</span></div><p><code>Optional</code> solves the problem of missing values that lead to a <code>NullPointerException</code>. If a person may have no
+car, <code>person.getCar().getColor()</code> crashes when <code>getCar()</code> returns null. You could add a null check, but it is
+easy to forget one.</p>
+<p>An <code>Optional&lt;Car&gt;</code> is a container object that either contains a <code>Car</code> or is empty. You create it with
+<code>Optional.of(car)</code> or <code>Optional.empty()</code>. Because the return type is <code>Optional&lt;Car&gt;</code> instead of <code>Car</code>, the caller
+can see that the value may be missing and is forced to handle that case. For example,
+<code>person.getCar().map(c -&gt; c.getColor()).orElse("none")</code> applies <code>getColor</code> only if there is a car, and otherwise
+returns "none". This is shorter than the version with a null check and cannot be forgotten.</p>
+<p>Streams also use it: operations that might not find a result, such as <code>findFirst()</code> or <code>max()</code>, return an
+Optional because the stream could be empty. Calling <code>get()</code> on an empty Optional throws an exception, so it is
+better to use <code>orElse</code> or <code>isPresent</code>.</p></div></article></section><section class="group" id="threadsg"><h2>Threads</h2><article class="topic" id="t-process-thread"><h3>Processes vs threads</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is the difference between a thread and a process?</q> · <q>Why would you use multiple threads?</q></p><div class="explain"><p>A process is roughly a running program. A computer runs many processes in parallel; each has its own private
+memory, and processes communicate through e.g. sockets. A thread is a separate flow of control <em>inside</em> one
+process. All threads of a process share its memory, so they can work on the same objects. Every Java program
+starts with the <code>main</code> thread.</p>
+<p>Use threads to do several things at once within one program: an email client that checks for new mail while
+you type, a web server that serves many users at the same time, converting a folder of WAV files, accepting
+input while a page loads. Threads are not necessary and risky; they fit problems that split up easily.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Process ≈ running program with its own private memory</li><li>Thread = flow of control inside a process; threads <strong>share</strong> the process's memory</li><li>A process can have many threads; a thread belongs to one process</li><li>Use: several things at once in one program (examples)</li><li>Risks: unpredictable order, synchronization problems</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Процесът е програма със собствена памет. Нишката е поток на изпълнение вътре в процеса и споделя паметта му с другите нишки. Затова нишките могат да си пречат и трябва синхронизация.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">194 words</span></div><p>A process is, roughly, a running program. An operating system runs many processes at the same time, and each
+process has its own private piece of memory. Processes can only exchange information through explicit
+mechanisms such as sockets.</p>
+<p>A thread is a separate flow of control within a single process. One process can contain several threads, and a
+thread always belongs to exactly one process. All threads of a process work in the same memory, so they can
+access the same objects directly. Every Java program starts with one thread, the main thread, and can start
+more.</p>
+<p>Threads are useful when one program needs to do several things at the same time: an email program can check
+for new messages and synchronise the calendar while the user is typing, and a web server can serve pages to
+many users simultaneously. They work best for problems that are easy to split, such as processing many files
+with the same algorithm. The downside is that threads are risky: the order in which they run is not fixed, and
+because they share memory, they can interfere with each other, which requires synchronization and can lead to
+deadlocks.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say threads have their own private memory, or that a thread can belong to several processes.</p></article><article class="topic" id="t-concurrency"><h3>Concurrency vs parallelism, scheduling, Heisenbugs</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain concurrency and parallelism.</q> · <q>Can a program be concurrent on a single core?</q> · <q>Why is the order of thread execution not fixed?</q></p><div class="explain"><p>The lecture: <strong>concurrency</strong> = doing many things at the same time; <strong>parallelism</strong> = splitting one big job over
+multiple processors. Within one process there are three ways: <strong>1 processor</strong> → interleaving (each thread gets a
+bit of time in turn); <strong>more than 1 processor</strong> → threads really run at the same time; <strong>hyperthreading</strong> → the
+parts of a core that hold the state are duplicated (not the execution resources), so switching is efficient.</p>
+<p>The <strong>scheduler</strong> of the operating system decides which thread runs when. The order is not guaranteed and
+differs per run and per OS. Bugs caused by wrong assumptions about that order are <strong>Heisenbugs</strong>: they appear
+in one run and not the next.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Concurrency: many tasks in progress at the same time</li><li>Parallelism: one job split over several processors</li><li>1 core: interleaving (time slices) — concurrency without parallelism</li><li>Multiple cores: real parallel execution; hyperthreading duplicates state parts</li><li>Order decided by the scheduler, not fixed → Heisenbugs</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Concurrency (едновременност) е възможна и на едно ядро чрез редуване (interleaving). Parallelism (паралелизъм) е реално едновременно изпълнение на няколко ядра. Редът на нишките се решава от scheduler-а и не е гарантиран.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">202 words</span></div><p>Concurrency means that several tasks are in progress at the same time, for example a program that downloads a
+file while it reacts to the user. Parallelism means that one large job is split up and executed on several
+processors at the same moment.</p>
+<p>Concurrency is possible on a processor with a single core. The threads then take turns through interleaving:
+each thread gets a small amount of time, after which another thread may continue. All threads make progress,
+but at any instant only one is running. With more than one core, different threads can truly run in parallel.
+Hyperthreading is in between: a core duplicates the parts that hold the state of a thread, but not the
+execution resources, so it can switch between threads very efficiently.</p>
+<p>Which thread runs when is decided by the scheduler of the operating system. The order is therefore not
+guaranteed: it can differ every time the program runs and between operating systems. Programmers must not
+rely on a particular order. Bugs that come from wrong expectations about thread scheduling are called
+Heisenbugs, and they are hard to find because they often do not appear again when you run or debug the
+program a second time.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say concurrency needs multiple cores.</p></article><article class="topic" id="t-start-threads"><h3>Starting threads: Runnable, start vs run, platform vs virtual</h3><p class="asks"><span class="lbl">Could be asked as</span><q>How do you create and start a thread in Java?</q> · <q>What is the difference between platform and virtual threads?</q></p><div class="explain"><pre><code class="language-java">public class AsyncClass implements Runnable {
+    public void run() { /* work for the new thread */ }
+}
+Thread.ofPlatform().start(new AsyncClass());   // new platform thread runs run()
+Thread.ofVirtual().start(() -&gt; doWork());       // Runnable is a functional interface
+</code></pre>
+<p>Only implementing <code>Runnable</code> starts nothing. Calling <code>r.run()</code> yourself runs it in the current thread. A method
+you call <code>start()</code> inside your Runnable is just a normal method (the RoadRunner question).</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Platform thread</th>
+<th>Virtual thread</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>directly connected to an OS thread</td>
+<td>not directly connected</td>
+</tr>
+<tr>
+<td>relatively more resources</td>
+<td>fewer resources</td>
+</tr>
+<tr>
+<td>scales OK</td>
+<td>scales very well</td>
+</tr>
+<tr>
+<td>long, resource-intensive tasks</td>
+<td>short, simple tasks (many of them)</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>Implement <code>Runnable</code> with <code>void run()</code>: the work of the thread</li><li>Start with <code>Thread.ofPlatform().start(r)</code> / <code>Thread.ofVirtual().start(r)</code>; <code>run()</code> directly = no new thread</li><li>Platform: 1-to-1 with an OS thread, heavier, for long resource-intensive tasks</li><li>Virtual (Java 21): not tied to an OS thread, cheap, scales to many short tasks</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Само <code>implements Runnable</code> не стартира нищо. Нишка стартира <code>Thread.ofPlatform()/ofVirtual().start(r)</code>, която вика <code>run()</code>. Platform нишките са свързани с нишка на ОС и са „тежки“; virtual нишките са леки и подходящи за много кратки задачи.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">169 words</span></div><p>To create a thread you first describe its work by implementing the interface <code>Runnable</code>, which has one method,
+<code>void run()</code>. Implementing <code>Runnable</code> alone does not start anything. You start a thread with
+<code>Thread.ofPlatform().start(myRunnable)</code> or <code>Thread.ofVirtual().start(myRunnable)</code>; the new thread then executes
+<code>myRunnable.run()</code>. Calling <code>run()</code> yourself is a normal method call in the current thread, and any other
+method of the object, even one called <code>start</code>, is never called by the thread. Because <code>Runnable</code> is a
+functional interface, a lambda can also be passed.</p>
+<p>Since Java 21 there are two kinds of threads. A platform thread is directly connected to a thread of the
+operating system. It uses relatively many resources and scales reasonably, so it is best for long-running,
+resource-intensive tasks. A virtual thread is not directly tied to an operating-system thread; the Java runtime
+manages it. It uses far fewer resources and scales very well, so you can create very many of them. Virtual
+threads are best suited for short and simple tasks, such as handling many small requests.</p></div><p class="avoid"><strong>Avoid:</strong> Don't confuse <code>run()</code> (normal call) with <code>start(...)</code> (new thread).</p></article><article class="topic" id="t-race"><h3>Race conditions and synchronized</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What can go wrong when two threads use the same data?</q> · <q>Explain the keyword <code>synchronized</code>.</q></p><div class="explain"><p><code>x++</code> is really three steps: read <code>x</code>, add 1, write back. If two threads read the same value before either
+writes, one increment is lost. In the lecture's example (two threads, each incrementing a shared <code>x</code> 10 times)
+the result is at most 20, never more, and not predictable.</p>
+<pre><code class="language-java">public synchronized void increment() { c++; }       // lock on this object
+public void decrement() { synchronized (this) { c--; } }   // lock only a block
+</code></pre>
+<p><code>synchronized</code> uses the object's lock: as soon as one thread enters a synchronized method of object O, no other
+thread can enter any synchronized method of O until it leaves. Other objects are not blocked.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Threads share memory → can read/write the same data at the same time</li><li>Read-modify-write (<code>x++</code>) can lose updates; result unpredictable</li><li><code>synchronized</code> method or block: only one thread at a time per <strong>object</strong></li><li>Other threads wait; non-synchronized code is not protected</li><li>Cost: waiting, risk of deadlock</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Race condition: две нишки четат една и съща стойност и едното увеличение се губи. <code>synchronized</code> позволява само една нишка наведнъж в synchronized методите на даден обект.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">199 words</span></div><p>Because threads of one process share memory, two threads can access the same data at the same time. This
+causes a race condition when the result depends on the timing of the threads. For example, <code>x = x + 1</code> consists
+of reading <code>x</code>, adding one and writing the result back. If two threads both read the value 0 before either of
+them writes, both write 1 and one increment is lost. If two threads each increase a shared counter ten times,
+the result is at most 20, but it can be lower and differ per run.</p>
+<p>The keyword <code>synchronized</code> prevents this. A method declared as <code>public synchronized void increment()</code>, or a block
+<code>synchronized (this) { ... }</code>, can only be executed by one thread at a time for a given object. As soon as one
+thread is inside a synchronized method of an object, every other thread that wants to enter any synchronized
+method of that same object has to wait until the first one leaves. The read-modify-write then happens as one
+step, so no updates are lost. Objects other than the locked one are not blocked. The price is that threads
+must wait, and careless use of locks can lead to deadlock.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say <code>synchronized</code> locks the whole class or all objects (for instance methods it locks <code>this</code>).</p></article><article class="topic" id="t-deadlock"><h3>Deadlock</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is a deadlock and how can it occur?</q> · <q>How can you prevent a deadlock?</q></p><div class="explain"><p>T1 is in synchronized <code>o1.m1()</code> and calls synchronized <code>o2.m3()</code>; T2 is in synchronized <code>o2.m2()</code> and calls
+synchronized <code>o1.m4()</code>. Each holds the lock the other needs → both wait forever. In Practice Exam I,
+<code>firstStep</code> locked <code>s1</code> then needed <code>s2</code>, and <code>secondStep</code> locked <code>s2</code> then needed <code>s1</code>: "Deadlock can occur."</p></div><div class="points"><h4>What graders look for</h4><ul><li>Two (or more) threads each hold a lock and wait for a lock held by the other</li><li>Caused by <code>synchronized</code> methods calling synchronized methods of other objects</li><li>Result: threads wait forever, program hangs</li><li>Prevent: acquire locks in the same order, keep synchronized parts small, avoid nested locking</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Deadlock: всяка нишка държи ключалка, която другата чака — и двете чакат вечно. Избягва се, като всички нишки заключват обектите в един и същ ред.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">184 words</span></div><p>A deadlock is a situation in which two or more threads wait for each other forever, so none of them can
+continue. It can occur with <code>synchronized</code>. Suppose thread T1 is executing the synchronized method <code>m1</code> of
+object <code>o1</code>, so it holds the lock of <code>o1</code>. Inside <code>m1</code> it calls <code>o2.m3()</code>, which is also synchronized, so T1 needs
+the lock of <code>o2</code>. At the same time thread T2 is executing the synchronized method <code>m2</code> of <code>o2</code>, so it holds the
+lock of <code>o2</code>, and calls the synchronized method <code>o1.m4()</code>, for which it needs the lock of <code>o1</code>. T1 waits for T2 to
+release <code>o2</code>, and T2 waits for T1 to release <code>o1</code>. Neither ever happens, so the program hangs.</p>
+<p>Whether a deadlock actually occurs depends on the timing of the threads, which is why one can only say that it
+can occur. It can be prevented by letting all threads acquire locks in the same fixed order (for example
+always <code>o1</code> before <code>o2</code>), by keeping synchronized sections as small as possible and by not calling synchronized
+methods of other objects while holding a lock.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say a deadlock throws an exception; the program just hangs.</p></article></section><section class="group" id="oop"><h2>Object-oriented concepts</h2><article class="topic" id="t-binding"><h3>Static vs dynamic binding</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain binding in Java.</q> · <q>What is the difference between static and dynamic binding?</q></p><div class="explain"><p><strong>Binding</strong> = associating a method call with a method definition (which code runs).</p>
+<pre><code class="language-java">Animal a = new Dog();     // declared type Animal, actual type Dog
+a.makeSound();            // dynamic: JVM picks Dog.makeSound() at runtime (overriding)
+print(5);                 // static: compiler picks print(int) over print(String) (overloading)
+Math.max(1, 2);           // static: static method
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>Static (early)</th>
+<th>Dynamic (late)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>decided by</td>
+<td>compiler</td>
+<td>JVM at runtime</td>
+</tr>
+<tr>
+<td>based on</td>
+<td>declared type</td>
+<td>actual object type</td>
+</tr>
+<tr>
+<td>applies to</td>
+<td>overloaded, <code>static</code>, <code>private</code>, <code>final</code> methods; no inheritance</td>
+<td>overridden instance methods</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>Binding = linking a method call to a method definition</li><li>Static binding: at compile time by the compiler, based on the declared type</li><li>Used for overloading and static/private/final methods (no inheritance needed)</li><li>Dynamic binding: at runtime by the JVM, based on the actual object</li><li>Used for overriding → enables polymorphism</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Static binding решава компилаторът по декларирания тип (overloading, static методи). Dynamic binding решава JVM по реалния обект (overriding) — това прави полиморфизма възможен.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">180 words</span></div><p>Binding is the process in which a method call is associated with the method definition that will be executed.
+Java supports two kinds of binding.</p>
+<p>Static binding is decided by the compiler, at compile time, based on the declared type of the variable and the
+types of the arguments. It is used when there is only one possible implementation: for static, private and
+final methods, and to choose between overloaded methods, which have the same name but different parameter
+types. For example, the compiler decides that <code>print(5)</code> calls <code>print(int)</code> and not <code>print(String)</code>.</p>
+<p>Dynamic binding is decided by the Java Virtual Machine at runtime, based on the actual type of the object. It is
+used for overridden instance methods. If <code>Animal a = new Dog();</code> and <code>Dog</code> overrides <code>makeSound()</code>, then
+<code>a.makeSound()</code> executes the version of <code>Dog</code>, even though the declared type is <code>Animal</code>. The compiler only checks
+that <code>Animal</code> has such a method.</p>
+<p>Dynamic binding is what makes polymorphism possible: objects of different subclasses, for example in an
+<code>Animal[]</code>, can be handled in the same way while each executes its own implementation.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say overloaded or static methods use dynamic binding (that exact claim was false in Practice Exam II).</p></article><article class="topic" id="t-inheritance"><h3>Inheritance and the Liskov Substitution Principle</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Why would you use inheritance?</q> · <q>Explain the Liskov Substitution Principle.</q></p><div class="explain"><p><code>class Student extends Person</code>: a Student <strong>is a</strong> Person. The relation is transitive, has no cycles and forms a
+hierarchy. The subclass gets all properties of the superclass and can call its public methods; it calls the
+parent constructor with <code>super(...)</code> as the first statement.</p>
+<p><strong>Liskov Substitution Principle</strong>: if A is a superclass of B, then wherever an object of type A is required, an
+object of type B is also acceptable: <code>Person a = new Student(...)</code>, <code>addPerson(new Student(...))</code>.</p></div><div class="points"><h4>What graders look for</h4><ul><li>"Is a" relationship; subclass <code>extends</code> superclass</li><li>Reuse: subclass inherits attributes and methods</li><li>Specialisation / generalisation; model relationships between concepts</li><li>Polymorphism: treat variants the same way</li><li>LSP: subclass object usable everywhere the superclass is expected</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Наследяване = „е“ (Student е Person): преизползваш код и третираш варианти по еднакъв начин. Принципът на Лисков: навсякъде, където се очаква обект от родителя, трябва да може да се подаде и обект от подкласа.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">193 words</span></div><p>Inheritance is a relationship between two classes in which one class, the subclass, is a special kind of the
+other, the superclass: a <code>Student</code> is a <code>Person</code>. In Java it is written as <code>class Student extends Person</code>. The
+relationship is transitive and cannot contain cycles, so classes form a hierarchy.</p>
+<p>There are three reasons to use it. First, it models relationships between concepts: the subclass is a
+specialisation and the superclass a generalisation. Second, it enables reuse: a <code>Student</code> inherits the name,
+address and methods such as <code>getName()</code> from <code>Person</code>, so they are not implemented twice. Third, it allows
+different variants to be used in the same way through polymorphism, for example a <code>Cat</code> and a <code>Dog</code> in one
+<code>Animal[]</code>, each with its own <code>makeSomeNoise()</code>.</p>
+<p>The Liskov Substitution Principle states that if A is a superclass of B, then at every place in the program
+where an object of type A is expected, an object of type B must also be acceptable. So
+<code>Person p = new Student(...)</code> is allowed, and a method <code>addPerson(Person p)</code> also accepts a Student. A subclass
+should therefore never break the behaviour that users of the superclass rely on.</p></div></article><article class="topic" id="t-types-casting"><h3>Declared vs actual type, casting</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain the difference between the declared and actual type of a variable.</q> · <q>When does a cast cause an error?</q></p><div class="explain"><pre><code class="language-java">Account a2 = new SavingsAccount();              // declared Account, actual SavingsAccount
+SavingsAccount s = new Account();               // compile error
+SavingsAccount s2 = (SavingsAccount) a2;        // OK
+SavingsAccount s3 = (SavingsAccount) a1;        // a1 is a plain Account → ClassCastException
+Button b = (Button) a1;                         // compile error: unrelated types
+</code></pre>
+<p>Primitive casts convert values (<code>(int) d</code>); reference casts only say "interpret as".</p></div><div class="points"><h4>What graders look for</h4><ul><li>Declared (static) type: type of the variable, checked by the compiler</li><li>Actual (dynamic) type: class of the object at runtime</li><li>Upcast (subclass → superclass) is implicit and safe</li><li>Downcast needs an explicit cast; wrong actual type → <code>ClassCastException</code> at runtime</li><li>Cast between unrelated types → compile error</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Декларираният тип е на променливата (гледа го компилаторът), реалният — на обекта (гледа го JVM). Грешен downcast се компилира, но хвърля ClassCastException при изпълнение.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">191 words</span></div><p>Every variable has a declared type, also called static type: the type written in its declaration, which the
+compiler uses to check which methods may be called. Every object has an actual type, also called dynamic type:
+the class it was created from with <code>new</code>. With inheritance they can differ:
+<code>Account a = new SavingsAccount();</code> has declared type <code>Account</code> and actual type <code>SavingsAccount</code>.</p>
+<p>Assigning a subclass object to a superclass variable (an upcast) is always safe, because a <code>SavingsAccount</code> is an
+<code>Account</code>. The opposite, <code>SavingsAccount s = new Account();</code>, does not compile, because a plain account lacks the
+extra attributes and methods. With an explicit cast, <code>(SavingsAccount) a</code>, you tell the compiler to trust you.
+The compiler accepts it because the object could be a <code>SavingsAccount</code>, but the JVM checks the actual type at
+runtime: if it is not, a <code>ClassCastException</code> is thrown. A cast between unrelated types, such as from <code>Account</code>
+to <code>Button</code>, can never succeed and is a compile error.</p>
+<p>For primitive types a cast converts the value, for example <code>(int) 3.9</code> gives 3. For reference types a cast does
+not change the object; it only changes how it is interpreted.</p></div></article><article class="topic" id="t-abstract-interface"><h3>Abstract classes vs interfaces</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is the difference between an abstract class and an interface?</q> · <q>When would you use an abstract class?</q></p><div class="explain"><pre><code class="language-java">public abstract class Shelter {                // cannot be instantiated
+    private String id; private int volume;     // shared state
+    public abstract String getClimate();       // subclasses must implement
+    public int getVolume() { return volume; }  // shared code
+}
+public class Task implements Runnable, Comparable&lt;Task&gt; { … }   // many interfaces
+</code></pre>
+<p>In the marine zoo design, <code>Shelter</code> is abstract: there is no "plain" shelter, only Coastal, Tundra and Reef.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Neither can be instantiated</li><li>Abstract class: fields, constructors, concrete + abstract methods; single inheritance (<code>extends</code> one)</li><li>Interface: a contract of methods (no instance state); a class can <code>implement</code> many</li><li>Abstract class for related classes sharing code/state; interface for a capability (<code>Runnable</code>, <code>Comparable</code>)</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Абстрактен клас: общ код и състояние за свързани класове, наследява се само един. Интерфейс: договор/способност (Runnable, Comparable), клас може да имплементира много.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">180 words</span></div><p>An abstract class is a class that cannot be instantiated and may contain abstract methods without a body,
+which every concrete subclass must implement. It can also contain attributes, constructors and normal methods
+with an implementation. An interface describes a contract: a set of method signatures that implementing classes
+must provide, without instance attributes. Neither can be created with <code>new</code>.</p>
+<p>The main differences are that an abstract class can hold shared state and code, while an interface cannot hold
+instance state, and that a class can extend only one class but implement many interfaces.</p>
+<p>An abstract class is a good choice when several closely related classes share attributes and behaviour, but the
+general class itself should not exist as an object. In the marine zoo example, <code>Shelter</code> holds the id, volume
+and availability that all shelters share and declares <code>abstract String getClimate()</code>, while <code>CoastalShelter</code>,
+<code>TundraShelter</code> and <code>ReefShelter</code> add their own details. An interface is a better choice to describe a capability
+that unrelated classes can have, such as <code>Runnable</code> (can be run by a thread) or <code>Comparable</code> (can be ordered).</p></div></article><article class="topic" id="t-composition"><h3>Composition vs inheritance (attribute vs subclass)</h3><p class="asks"><span class="lbl">Could be asked as</span><q>When should you use composition instead of inheritance?</q> · <q>Should Volkswagen be a subclass of Vehicle?</q></p><div class="explain"><p>Inheritance = "is a" (Student is a Person). Composition = "has a" (Product has a Barcode, ProductLine has many
+Products), with one-to-one and one-to-many relations. A subclass makes sense when the variant behaves
+differently and there are few known variants. When the difference is just a value and there can be infinitely
+many (car brands), use an attribute (Practice Exam II).</p></div><div class="points"><h4>What graders look for</h4><ul><li>Inheritance: "is a", reuse + polymorphism, but tight coupling and fixed at compile time</li><li>Composition: "has a", one-to-one / one-to-many attributes</li><li>Use a subclass only for different behaviour and a small, known set of variants</li><li>Data that only differs in value (brand, colour) → attribute</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Подклас само ако поведението е различно и вариантите са малко и известни. Ако се различава само стойност (марка, цвят) — атрибут.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">177 words</span></div><p>Inheritance models an "is a" relationship: a <code>Student</code> is a <code>Person</code>. Composition models a "has a" relationship: a
+<code>Product</code> has a <code>Barcode</code>, and a <code>ProductLine</code> has many <code>Product</code>s, stored as an attribute or a list.</p>
+<p>Inheritance is appropriate when the subclass really is a special kind of the superclass, adds or changes
+behaviour, and there is a limited, known set of variants. It gives reuse and polymorphism, but it couples the
+classes tightly and the set of subclasses is fixed when the code is written.</p>
+<p>Composition is more flexible. When objects only differ in the value of some property, that property should be
+an attribute instead of a new class. For example, there are potentially infinitely many car brands, and a
+brand does not change how a vehicle behaves. Creating a subclass <code>Volkswagen</code> for every brand would need an
+unlimited number of classes and new code for every new brand. Giving the class <code>Vehicle</code> an attribute <code>brand</code>
+handles every brand without changing the code. So: use inheritance for different behaviour, and composition or
+attributes for different data.</p></div></article><article class="topic" id="t-encapsulation"><h3>Encapsulation and access modifiers</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is encapsulation and why is it useful?</q> · <q>Explain <code>public</code>, <code>protected</code>, package and <code>private</code>.</q></p><div class="explain"><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>class</th>
+<th>package</th>
+<th>subclass</th>
+<th>world</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>(none)</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><code>private</code></td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>Attributes <code>private</code>, access through public methods (getters/setters)</li><li>Hides the implementation from users of the class</li><li>Protects the object's state (also against your own mistakes)</li><li>Access table; subclasses don't see <code>private</code>; packages group classes</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Капсулация: полетата са private, достъпът е през public методи. Така скриваш имплементацията и пазиш състоянието на обекта от невалидни промени.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">178 words</span></div><p>Encapsulation means that a class hides its internal data and implementation and only offers a controlled
+interface to the outside world. In Java, attributes are declared <code>private</code> and other classes use them only
+through <code>public</code> methods, such as <code>getX()</code>. In UML this is shown with a minus sign for private and a plus sign for
+public members.</p>
+<p>This is useful for two reasons. First, users of the class do not need to know how it is implemented internally,
+so the implementation can change without breaking other code. Second, it protects the state of the object: other
+code cannot set an attribute to an invalid value directly, which also protects programmers against their own
+mistakes.</p>
+<p>Java has four access levels. <code>public</code> members are accessible everywhere. <code>protected</code> members are accessible in the
+same package and in subclasses. Members without a modifier have package access: only classes in the same package
+can use them. <code>private</code> members are only accessible inside the class itself, not even in subclasses. Packages
+group related classes and prevent name clashes between classes with the same name.</p></div></article><article class="topic" id="t-static"><h3>static (the Practice Exam I question)</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain for each scenario (static↔non-static) whether it's possible and desirable.</q></p><div class="explain"><p>A <code>static</code> member belongs to the class (one copy for all objects); a non-static member belongs to each object.
+A static context has no <code>this</code>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p1.getX()</code></td>
+<td>works</td>
+</tr>
+<tr>
+<td><code>Point.staticMethod()</code></td>
+<td>works</td>
+</tr>
+<tr>
+<td><code>p1.staticMethod()</code></td>
+<td>works, warning</td>
+</tr>
+<tr>
+<td><code>Point.getX()</code></td>
+<td>compile error</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>static → static: possible, fine for object-independent behaviour (<code>Math.max</code>)</li><li>non-static from static: not directly (no <code>this</code>), only through an object reference</li><li>static from non-static: possible; constants/counters OK, mutable shared state needs care</li><li>non-static → non-static: possible, normal OOP</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Static принадлежи на класа, нестатичното — на обекта. Static метод няма <code>this</code>, затова не може директно да ползва нестатични членове.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">181 words</span></div><ol>
+<li>
+<p>Static from static: possible. Static members belong to the class, so a static method can call other static
+methods and use static fields directly, for example <code>main</code> calling a static helper. This is desirable for
+behaviour that does not depend on an object, such as <code>Math.max</code>.</p>
+</li>
+<li>
+<p>Non-static from static: not possible directly. A static context has no <code>this</code>, so the compiler does not know
+which object's field or method is meant ("non-static variable cannot be referenced from a static context"). It
+only works through an explicit object reference, e.g. <code>Person p = new Person(); p.getName();</code>, which is the
+normal and desirable way.</p>
+</li>
+<li>
+<p>Static from non-static: possible, because every object can see the static members of its class. It is
+desirable for shared constants (<code>static final</code>) or class-wide data such as a counter of created objects.
+Changing mutable static state from instances needs care, because the change is shared by all objects.</p>
+</li>
+<li>
+<p>Non-static from non-static: possible and desirable. Instance methods work on the state of their own object
+through the implicit <code>this</code>; this is the core of object-oriented programming.</p>
+</li>
+</ol></div></article><article class="topic" id="t-sealed"><h3>sealed (the Practice Exam II question)</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain what the effect of <code>sealed</code> is and why it might be desirable.</q></p><div class="explain"><pre><code class="language-java">public sealed class Shape permits Circle, Square { }
+public final class Circle extends Shape { }
+public non-sealed class Square extends Shape { }
+</code></pre>
+<p>Grading: the meaning (which classes are permitted, others not — clearly different from <code>final</code>) 1.0; why
+desirable 0.5; small mistake −0.5.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Only the classes in <code>permits</code> may extend/implement it; others → compile error</li><li>Must be clear that <em>some</em> classes are allowed (≠ <code>final</code>)</li><li>Permitted subclasses are <code>final</code>, <code>sealed</code> or <code>non-sealed</code></li><li>Desirable: control over the hierarchy (library Shape example); compiler knows all subclasses</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg"><code>sealed</code> позволява само изброените (<code>permits</code>) класове да наследяват. Разликата с <code>final</code>: при <code>final</code> никой не може, при <code>sealed</code> — някои могат.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">177 words</span></div><p>The modifier <code>sealed</code> restricts which classes may extend a class or implement an interface. The permitted
+subclasses are listed in a <code>permits</code> clause, for example <code>public sealed class Shape permits Circle, Square</code>. Only
+these classes may extend <code>Shape</code>; any other class that tries to extend it causes a compilation error. Each
+permitted subclass must itself be declared <code>final</code> (no further subclasses), <code>sealed</code> (again restricted) or
+<code>non-sealed</code> (open again). So <code>sealed</code> sits between a normal class, which anyone can extend, and a <code>final</code> class,
+which nobody can extend: some chosen classes are allowed, all others are not.</p>
+<p>This is desirable when you want full control over a class hierarchy. A geometry library may want <code>Shape</code> to
+have exactly the subclasses <code>Circle</code> and <code>Square</code>, and not allow clients of the library to declare new shapes
+that the library does not know how to handle. Because the compiler knows the complete set of subclasses, it can
+also check that all cases are handled, for example in a <code>switch</code> over a <code>Shape</code>. This makes the code safer and
+easier to maintain.</p></div><p class="avoid"><strong>Avoid:</strong> Don't describe it as "nobody can extend it" — that is <code>final</code>.</p></article><article class="topic" id="t-records"><h3>Records and immutability</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is a record and when would you use one?</q> · <q>What are the limitations of records?</q></p><div class="explain"><p><code>public record Person(String name, int age) { }</code> generates <code>private final</code> fields, a constructor, accessors
+<code>name()</code> / <code>age()</code>, <code>equals</code>, <code>hashCode</code> and <code>toString</code>. You can add methods and static members, override
+generated methods and implement interfaces.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Special class for immutable data; less boilerplate</li><li>Generated: final fields, constructor, accessors (no <code>get</code>), equals, hashCode, toString</li><li>Can add methods, static fields; can override generated methods</li><li>Cannot extend a class, cannot be extended, fields can't change</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Record = клас само за неизменими (immutable) данни. Java генерира полета, конструктор, accessor-и (<code>name()</code>), equals, hashCode, toString. Не може да наследява и да бъде наследяван.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">179 words</span></div><p>A record is a special kind of class that simplifies implementing a class that only stores immutable data. You
+only declare the components, for example <code>public record Person(String name, int age) {}</code>, and Java generates the
+rest: private final fields, a constructor that sets all fields, accessor methods <code>name()</code> and <code>age()</code> (without
+"get"), and implementations of <code>equals</code>, <code>hashCode</code> and <code>toString</code> based on all components. A normal class with
+the same behaviour needs about thirty lines of code.</p>
+<p>Records are useful for objects that only carry data and should not change after creation, such as a <code>Card</code>, a
+<code>Log</code> entry or a key in a <code>HashMap</code>. Because they are immutable, they can be shared safely, also between threads,
+and their generated <code>equals</code> and <code>hashCode</code> are always consistent with each other.</p>
+<p>You can still add your own methods, static methods and static attributes, implement interfaces, and override
+generated methods such as <code>equals</code>. The limitations are that a record cannot extend another class, no class can
+extend a record because it is implicitly final, and its fields can never be changed after initialisation.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say records can't override <code>equals</code> (they can).</p></article></section><section class="group" id="types"><h2>Equality, generics, memory</h2><article class="topic" id="t-equals-contract"><h3>The equals contract; getClass vs instanceof</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Which properties must <code>equals</code> satisfy?</q> · <q>Why use <code>getClass()</code> instead of <code>instanceof</code> in <code>equals</code>?</q></p><div class="explain"><p>Without your own <code>equals</code>, <code>Object.equals</code> is used, which is <code>this == obj</code>: memory addresses.</p>
+<pre><code class="language-java">public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Person that = (Person) o;
+    return age == that.age &amp;&amp; Objects.equals(name, that.name);
+}
+</code></pre>
+<p>With <code>instanceof</code>: <code>vehicle.equals(train)</code> is true (a Train is a Vehicle) but <code>train.equals(vehicle)</code> is false.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Default <code>Object.equals</code> compares addresses (<code>==</code>)</li><li>Contract: reflexive, symmetric, transitive, consistent, <code>x.equals(null)</code> false</li><li><code>instanceof</code> with inheritance can break symmetry (parent accepts child, child rejects parent)</li><li><code>getClass()</code> only accepts the exact same class → symmetric</li><li>Parameter must be <code>Object</code> (override, not overload)</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">equals трябва да е рефлексивен, симетричен, транзитивен и консистентен. <code>instanceof</code> при наследяване може да наруши симетрията — затова ползваме <code>getClass()</code>.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">159 words</span></div><p>The method <code>equals</code> must implement an equivalence relation on non-null objects. It must be reflexive
+(<code>x.equals(x)</code> is true), symmetric (<code>x.equals(y)</code> gives the same result as <code>y.equals(x)</code>), transitive (if
+<code>x.equals(y)</code> and <code>y.equals(z)</code>, then <code>x.equals(z)</code>) and consistent (repeated calls give the same result as long as
+the objects don't change). In addition, <code>x.equals(null)</code> must return false. If a class does not override
+<code>equals</code>, the version of <code>Object</code> is used, which only compares memory addresses.</p>
+<p>With inheritance, using <code>instanceof</code> in <code>equals</code> can break symmetry. If <code>Vehicle.equals</code> checks
+<code>o instanceof Vehicle</code> and <code>Train.equals</code> checks <code>o instanceof Train</code>, then <code>vehicle.equals(train)</code> is true,
+because a train is a vehicle, but <code>train.equals(vehicle)</code> is false, because a vehicle is not a train. By checking
+<code>o == null || getClass() != o.getClass()</code>, an object is only equal to objects of exactly the same class, so both
+calls return false and the relation stays symmetric. The parameter of <code>equals</code> must be of type <code>Object</code>;
+otherwise the method overloads instead of overrides <code>equals</code>.</p></div></article><article class="topic" id="t-hashcode"><h3>hashCode and hash-based collections</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Why must you override <code>hashCode</code> when you override <code>equals</code>?</q> · <q>What makes a good hash code?</q></p><div class="explain"><p><code>HashSet</code>/<code>HashMap</code> compute <code>hashCode()</code>, compress it to a bucket (simplest: <code>hash % buckets</code>) and only search that
+bucket with <code>equals</code>. Both steps take constant time.</p>
+<pre><code class="language-java">public int hashCode() {
+    int result = name.hashCode();
+    result = 31 * result + address.hashCode();
+    return result;               // or Objects.hash(name, address)
+}
+</code></pre></div><div class="points"><h4>What graders look for</h4><ul><li>Hash-based collections use <code>hashCode</code> to find a bucket, then <code>equals</code> inside it</li><li>Equal objects <strong>must</strong> have equal hash codes, otherwise lookups fail</li><li>Use the same fields as <code>equals</code></li><li>As unique as possible (avoid collisions); multiply by a prime like 31</li><li>Unequal objects may share a hash code</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Равни обекти задължително имат равни hashCode, иначе HashSet/HashMap търсят в грешната „кофа“ и не намират обекта. Ползвай същите полета като в equals.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">200 words</span></div><p>Classes such as <code>HashSet</code>, <code>HashMap</code> and <code>Hashtable</code> use hash codes to store and find objects quickly. When an
+object is added, its <code>hashCode()</code> is calculated and a compression function, for example the hash code modulo the
+number of buckets, turns it into a bucket index. To find an object later, only that one bucket is searched with
+<code>equals</code>, instead of the whole collection. Both steps take constant time.</p>
+<p>This only works if two objects that are equal according to <code>equals</code> also have the same hash code. Otherwise an
+equal object is looked up in a different bucket and is not found, so for example a <code>HashSet</code> could contain two
+"equal" objects. That is why <code>hashCode</code> must be overridden together with <code>equals</code>, using the same attributes.
+The reverse is not required: unequal objects may have the same hash code, but this should be rare.</p>
+<p>A good hash code is therefore consistent with <code>equals</code> and as unique as possible, because many equal hash codes
+put many objects into the same bucket and make the collection slow. It includes all attributes used in
+<code>equals</code>, and multiplying by a prime number such as 31 helps avoid collisions: <code>31 * name.hashCode() +
+address.hashCode()</code>, or simply <code>Objects.hash(name, address)</code>.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say equal hash codes imply equal objects.</p></article><article class="topic" id="t-generics"><h3>Generics and type erasure</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What are the benefits of generics?</q> · <q>What is type erasure?</q></p><div class="explain"><pre><code class="language-java">ArrayList products = new ArrayList();          // before Java 1.5: stores Object
+products.add(new Student(...));                // allowed
+Product p = (Product) products.get(0);         // ClassCastException at runtime
+
+ArrayList&lt;Product&gt; products = new ArrayList&lt;&gt;();
+products.add(new Student(...));                // compile error
+Product p = products.get(0);                   // no cast
+
+public class Box&lt;T&gt; { private T t; … }         // your own generic class
+</code></pre>
+<p><code>List&lt;String&gt;</code> is not a <code>List&lt;Object&gt;</code>. <code>Pair&lt;A, B extends Number&gt;</code> restricts B.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Type parameters (<code>&lt;T&gt;</code>) make classes/methods work for any type, checked by the compiler</li><li>Benefits: type errors at compile time, no casts, reuse (less code)</li><li>Not faster, no runtime checks</li><li>Type erasure: type arguments exist only at compile time; at runtime it's the raw class with <code>Object</code></li><li>Consequences: <code>instanceof Pair</code> is true for every Pair; no <code>new T()</code>; <code>List&lt;String&gt;</code> ≠ <code>List&lt;Object&gt;</code></li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Generics откриват грешки при компилация и махат нуждата от cast. Type erasure: типовите аргументи съществуват само при компилация — при изпълнение <code>Pair&lt;String,Integer&gt;</code> е просто <code>Pair</code> с <code>Object</code> вътре.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">199 words</span></div><p>Generics allow a class or method to be written once with a type parameter, such as <code>ArrayList&lt;T&gt;</code> or
+<code>Box&lt;T&gt;</code>, and then be used for any concrete type, such as <code>ArrayList&lt;Product&gt;</code>. Before generics, a list stored
+elements as <code>Object</code>: you could add any object, and when reading an element you had to cast it, which could fail
+with a <code>ClassCastException</code> at runtime.</p>
+<p>The benefits are that type errors are detected at compile time (adding a <code>Student</code> to an <code>ArrayList&lt;Product&gt;</code> does
+not compile), that no casts are needed when retrieving elements, and that one generic class can replace many
+similar classes, so you write less code. Generics do not make code faster and do not add checks at runtime.</p>
+<p>Type erasure means that generic type arguments only exist at compile time. The compiler checks the types and
+inserts the necessary casts, after which the type arguments are removed. At runtime a <code>Pair&lt;String, Integer&gt;</code> is
+just a <code>Pair</code> whose fields are of type <code>Object</code>, so <code>p instanceof Pair</code> is true for every pair, regardless of
+its type arguments. A related rule is that <code>List&lt;String&gt;</code> is not a subtype of <code>List&lt;Object&gt;</code>, because then an
+<code>Object</code> could be added to a list of Strings.</p></div><p class="avoid"><strong>Avoid:</strong> Don't list "faster code" or "runtime checks" as benefits.</p></article><article class="topic" id="t-autoboxing"><h3>Autoboxing and wrapper classes</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is autoboxing?</q> · <q>Why can't you write <code>List&lt;int&gt;</code>?</q></p><div class="explain"><p>Every primitive has a wrapper class: <code>int</code> → <code>Integer</code>, <code>double</code> → <code>Double</code>, <code>char</code> → <code>Character</code> …
+Generics only work with objects, so you write <code>ArrayList&lt;Integer&gt;</code>. Java converts automatically:</p>
+<pre><code class="language-java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(5);              // autoboxing: int → Integer
+int x = list.get(0);      // unboxing: Integer → int
+Integer n = null; int y = n;   // unboxing null → NullPointerException
+</code></pre></div><div class="points"><h4>What graders look for</h4><ul><li>Each primitive has a wrapper class</li><li>Generics/collections only accept objects</li><li>Autoboxing: compiler converts primitive → wrapper automatically; unboxing the other way</li><li>Only between a primitive and its own wrapper (<code>Integer</code> never becomes <code>Double</code>)</li><li>Unboxing <code>null</code> → <code>NullPointerException</code></li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Autoboxing = Java сама превръща примитив в обвиващия му клас (<code>int</code> → <code>Integer</code>) там, където се иска обект, например в <code>List&lt;Integer&gt;</code>. Само между примитив и неговия собствен wrapper.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">162 words</span></div><p>Java has eight primitive types, such as <code>int</code>, <code>double</code> and <code>char</code>, and for each of them a wrapper class, such as
+<code>Integer</code>, <code>Double</code> and <code>Character</code>, that stores the value as an object. Generic classes and collections can only
+contain objects, so you cannot write <code>List&lt;int&gt;</code>; you write <code>List&lt;Integer&gt;</code> instead.</p>
+<p>Autoboxing is the automatic conversion that the Java compiler performs from a primitive value to an object of the
+corresponding wrapper class when an object is required. For example, <code>list.add(5)</code> on a <code>List&lt;Integer&gt;</code> turns the
+<code>int</code> 5 into an <code>Integer</code>, and passing <code>5.0</code> to a method with a <code>Double</code> parameter turns the <code>double</code> into a
+<code>Double</code>. The reverse, from wrapper object to primitive, is called unboxing, as in <code>int x = list.get(0);</code>.</p>
+<p>Autoboxing only happens between a primitive and its own wrapper. An <code>Integer</code> object is never converted into a
+<code>Double</code>, and when you create a wrapper object yourself, for example <code>new Double(4.3)</code>, no autoboxing takes place.
+Unboxing a <code>null</code> reference throws a <code>NullPointerException</code>.</p></div></article><article class="topic" id="t-memory"><h3>Stack, heap and pass by value</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Is Java pass by value or pass by reference?</q> · <q>What is stored on the stack and on the heap?</q></p><div class="explain"><pre><code class="language-java">static void swap(int x, int y) { … }        // caller's a, b unchanged
+static void swap(Point p) { p.x = …; }      // caller's object changed
+static void swap(int[] row) { row = copy(row); … }   // caller unchanged
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>Heap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>one frame per method call: local variables, primitives, references</td>
+<td>everything created with <code>new</code>: objects, all arrays</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>Stack: method frames with local primitives and references</li><li>Heap: objects and arrays (<code>new</code>)</li><li>Java always passes by value: a copy of the argument</li><li>Primitives: value copied → changes invisible to caller</li><li>References: address copied → object changes visible; reassigning the parameter is not</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Java винаги копира аргумента. При примитиви — стойността; при обекти/масиви — адреса. Методът може да промени обекта, но не и към кое сочи променливата на извикващия.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">189 words</span></div><p>Java always passes arguments by value: when a method is called, a copy of each argument is placed in the
+method's own stack frame.</p>
+<p>The stack contains a frame for every running method, with its local variables. Primitive values such as an
+<code>int</code> are stored there directly. Objects and arrays, which are created with <code>new</code>, live on the heap; a variable of
+a reference type only stores the address of the object on the heap.</p>
+<p>For primitive parameters this means the value is copied, so a method like <code>swap(int x, int y)</code> only swaps its
+own copies and the caller's variables do not change. For objects and arrays the reference is copied, not the
+object. The method's parameter and the caller's variable then point to the same object, so changes to the object,
+such as <code>point.x = 5</code> or <code>row[0] = 0</code>, are visible to the caller. However, if the method assigns a new object to its
+parameter, for example <code>row = copy(row)</code>, only its own copy of the reference changes, and the caller still points
+to the old object. This is why Java is pass by value, even for objects.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say "objects are passed by reference".</p></article></section><section class="group" id="exc"><h2>Exceptions</h2><article class="topic" id="t-checked"><h3>Errors, checked and unchecked exceptions</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain the difference between errors, checked and unchecked exceptions.</q> · <q>How do you stop an exception from reaching the default exception handler? Is that required to compile? (Practice Exam II)</q></p><div class="explain"><p><code>Throwable</code> → <code>Error</code> (OutOfMemoryError, StackOverflowError) and <code>Exception</code>; under <code>Exception</code>,
+<code>RuntimeException</code> (NullPointer, Arithmetic, IndexOutOfBounds, ClassCast, NumberFormat) is unchecked; everything
+else (IOException, FileNotFoundException, InterruptedException) is checked.</p>
+<p>Practice Exam II rubric: catching stops it (1.0) · it is unchecked / extends RuntimeException (0.75) · not required
+to compile <strong>because</strong> it extends RuntimeException (0.75) · claiming <code>throws</code> stops it: −0.5. Note: <em>all</em>
+exceptions happen at runtime; "runtime exception" means the class <code>RuntimeException</code>.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Error: serious system problem, don't catch</li><li>Checked (subclass of <code>Exception</code>, not <code>RuntimeException</code>): must be caught or declared with <code>throws</code>; recoverable, outside your control</li><li>Unchecked (<code>RuntimeException</code>): compiler doesn't force handling; usually programming errors</li><li>Only <code>catch</code> stops an exception; <code>throws</code> passes it on; uncaught → default handler prints stack trace, ends program</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Checked (наследява Exception, но не RuntimeException) — компилаторът те кара да я хванеш или декларираш. Unchecked (RuntimeException) — не е задължително. Само <code>catch</code> спира изключението; <code>throws</code> само го подава нагоре.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">176 words</span></div><p>All throwable problems in Java inherit from <code>Throwable</code>, which has two branches. Errors, such as
+<code>OutOfMemoryError</code> and <code>StackOverflowError</code>, represent serious system problems that a program cannot reasonably
+recover from; they should not be caught. Exceptions represent problems that the programmer can and should handle.</p>
+<p>Exceptions are either checked or unchecked. Checked exceptions are subclasses of <code>Exception</code> that do not extend
+<code>RuntimeException</code>, for example <code>IOException</code> and <code>FileNotFoundException</code>. They represent recoverable situations
+outside the programmer's control, such as a missing file. The compiler forces you to either catch them or declare
+them with <code>throws</code>, otherwise the program does not compile. Unchecked exceptions extend <code>RuntimeException</code>, for
+example <code>NullPointerException</code> and <code>ArithmeticException</code>. They usually indicate programming errors, and the
+compiler does not require you to catch or declare them.</p>
+<p>When an exception is thrown, it travels up the call stack until a method catches it with a try/catch block. Only
+catching stops it; declaring it with <code>throws</code> only passes the responsibility to the caller. If no method catches
+it, the default exception handler prints the stack trace and terminates the program.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say "runtime exceptions don't need catching because they happen at runtime" — all exceptions happen at runtime.</p></article><article class="topic" id="t-exceptions-design"><h3>Exceptions vs error codes; finally; own exception classes</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Why use exceptions instead of returning error codes?</q> · <q>What is <code>finally</code> for?</q> · <q>Why create your own exception class?</q></p><div class="explain"><pre><code class="language-java">public Fraction(int n, int d) throws DivByZeroException {
+    if (d == 0) throw new DivByZeroException(&quot;Divisor cannot be zero&quot;);
+}
+try { … } catch (DivByZeroException e) { … } finally { /* always: close file */ }
+</code></pre></div><div class="points"><h4>What graders look for</h4><ul><li>Error codes (e.g. -1) mix with normal results and need complex <code>if</code>s in every caller</li><li>Exceptions separate error handling; can be handled anywhere up the call stack</li><li><code>finally</code> always runs (normal end, exception, return): clean-up such as closing files/locks</li><li>Own class (<code>extends Exception</code>/<code>RuntimeException</code>): specific, so callers can react precisely</li><li>Catch specific exceptions, specific before general</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Изключенията отделят обработката на грешки от нормалния код (за разлика от кодове като -1). <code>finally</code> се изпълнява винаги — за затваряне на файлове. Собствен клас прави грешката конкретна.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">191 words</span></div><p>A method can report a problem by returning an error code, for example <code>-1</code> from <code>getPrice()</code>. That has drawbacks:
+the error code can be confused with a real result, every caller has to check for it, and the code fills up with
+complex if-structures. Exceptions separate the normal flow from error handling. When something goes wrong, the
+method throws an exception and execution jumps to a matching catch block, which can be in that method or in any
+method higher up the call stack, wherever the problem can best be corrected.</p>
+<p>A <code>finally</code> block after <code>try</code> and <code>catch</code> is always executed: when the try block ends normally, when an exception
+is thrown, and even when the try block returns. It is used for clean-up that must always happen, such as closing a
+file or network connection or releasing a lock.</p>
+<p>Creating your own exception class, for example <code>class DivByZeroException extends Exception</code>, makes errors
+specific. A caller can then catch exactly that problem and handle it correctly, instead of catching a general
+<code>Exception</code> that could have many causes. For the same reason you should always catch specific exceptions rather
+than general ones.</p></div></article></section><section class="group" id="iog"><h2>Input / output</h2><article class="topic" id="t-readers"><h3>Readers vs streams, Scanner vs BufferedReader, buffering</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is the difference between Readers/Writers and InputStreams/OutputStreams?</q> · <q>Why use a BufferedReader?</q> · <q>Scanner or BufferedReader?</q></p><div class="explain"><div class="tbl"><table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Classes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>characters (text files)</td>
+<td><code>Reader</code> / <code>Writer</code></td>
+</tr>
+<tr>
+<td>bytes (images, objects)</td>
+<td><code>InputStream</code> / <code>OutputStream</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A disk access costs ~5 ms = 15,000,000 cycles at 3 GHz. <code>BufferedReader</code> reads big chunks. It is a
+<strong>decorator</strong>: it <em>is</em> a Reader and <em>has</em> a Reader. <code>readLine()</code> returns <code>null</code> at the end. Close it (finally or
+try-with-resources) so the file isn't kept locked. <code>java.io</code> is stream-oriented and blocking; <code>java.nio</code> is
+block-oriented with buffers and non-blocking.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Reader/Writer: characters (text); InputStream/OutputStream: raw bytes; <code>InputStreamReader</code> converts</li><li>Reading one char at a time from disk is slow → buffering reads chunks</li><li>BufferedReader = decorator (is a Reader, has a Reader), <code>readLine()</code></li><li>Scanner: slower but convenient (<code>nextInt</code>, delimiters); BufferedReader: faster, efficient</li><li>Always close (try-with-resources)</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Reader/Writer = символи (текст), InputStream/OutputStream = байтове. BufferedReader чете на големи парчета, защото дискът е бавен. Scanner е по-удобен, BufferedReader — по-бърз.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">187 words</span></div><p>The java.io library has two families of classes. Readers and Writers are designed for character streams and are
+used for text files. InputStreams and OutputStreams work with raw bytes without translating them, and are used
+for binary data such as images or serialized objects. An <code>InputStreamReader</code> can turn a byte stream into a
+character stream.</p>
+<p>Reading a file character by character, for example with <code>FileReader.read()</code>, is slow, because every access to the
+disk takes milliseconds, which is millions of processor cycles. A <code>BufferedReader</code> solves this by reading a large
+block of characters at once into a buffer and serving the following reads from memory. It is an example of the
+decorator pattern: a <code>BufferedReader</code> is a <code>Reader</code> and also has a <code>Reader</code>, adding buffering and a convenient
+<code>readLine()</code> method to any reader.</p>
+<p>A <code>Scanner</code> is more user-friendly and flexible: it can split input into tokens with a delimiter and read
+numbers directly with methods like <code>nextInt()</code>. A <code>BufferedReader</code> is faster and more efficient but only reads
+characters and lines. In both cases the file must be closed afterwards, preferably with try-with-resources, so
+it is not kept locked.</p></div></article><article class="topic" id="t-serial"><h3>Saving objects: DataOutputStream vs Serializable</h3><p class="asks"><span class="lbl">Could be asked as</span><q>How can you write an object to a file?</q> · <q>What does the <code>Serializable</code> interface do?</q></p><div class="explain"><pre><code class="language-java">// manual
+public void save(DataOutput out) throws IOException { out.writeUTF(name); out.writeDouble(rate); }
+// automatic
+class CurrencyTable implements Serializable { … }
+out.writeObject(table);   CurrencyTable t = (CurrencyTable) in.readObject();
+</code></pre></div><div class="points"><h4>What graders look for</h4><ul><li><code>DataOutputStream</code>: write primitives/Strings yourself (<code>writeUTF</code>, <code>writeDouble</code>), read back in the same order; full control, but the class handles its own storage</li><li><code>Serializable</code>: marker interface, no methods; <code>ObjectOutputStream.writeObject</code> stores the whole object</li><li><code>readObject</code> returns <code>Object</code> → cast; <code>ClassNotFoundException</code></li><li>Non-serializable class → <code>NotSerializableException</code></li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">DataOutputStream: сам записваш полетата и ги четеш в същия ред. Serializable е маркер интерфейс без методи — ObjectOutputStream записва целия обект с <code>writeObject</code>.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">174 words</span></div><p>There are two ways to store objects. With a <code>DataOutputStream</code> you decide yourself how an object is saved: the
+class gets a method such as <code>save(DataOutput out)</code> that writes each attribute with <code>writeUTF</code>, <code>writeDouble</code>, and
+so on, and a matching <code>load</code> method that reads them back with <code>readUTF</code> and <code>readDouble</code> in exactly the same
+order. This gives full control over the format, but the class itself becomes responsible for storage, and
+every change to its attributes requires changing both methods.</p>
+<p>Alternatively, a class can implement the interface <code>Serializable</code>. It is a marker interface: it has no methods to
+implement, it only indicates that objects of the class may be serialized. An <code>ObjectOutputStream</code> can then write
+a complete object, including the objects it refers to, with <code>writeObject(obj)</code>, and an <code>ObjectInputStream</code> reads
+it back with <code>readObject()</code>. Because <code>readObject</code> returns an <code>Object</code>, the result must be cast, and it can throw a
+<code>ClassNotFoundException</code>. If an object, or one of its attributes, does not implement <code>Serializable</code>, a
+<code>NotSerializableException</code> is thrown. A <code>DataOutputStream</code> cannot write arbitrary objects at all.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say <code>Serializable</code> requires you to implement methods.</p></article></section><section class="group" id="qual"><h2>Testing, quality and tools</h2><article class="topic" id="t-unit-testing"><h3>Unit testing principles</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Why should you write unit tests?</q> · <q>What makes a good test?</q> · <q>Unit tests vs integration tests?</q></p><div class="explain"><p>"Compiling software ≠ working software." JUnit: <code>@Test public void …()</code>, <code>assertEquals(expected, actual)</code>,
+<code>assertThrows(X.class, () -&gt; …)</code>. Positive (good weather) vs negative (bad weather) tests:
+<code>assertEquals(5, max(5, 3))</code> vs <code>assertNotEquals(4, max(5, 3))</code>.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Find bugs early (cheaper); compiling ≠ working; automated and repeatable</li><li>Unit test = one method/class in isolation; integration test = classes working together</li><li>Good and bad weather tests</li><li>One workflow per test, few asserts → failure location is clear</li><li>Can't test everything: "presence, not absence of bugs"; aim for coverage (80%)</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Unit тестът проверява един метод/клас изолирано; integration тестът — как класовете работят заедно. Тествай и „добро“, и „лошо време“; един сценарий на тест.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">203 words</span></div><p>Code that compiles is not necessarily correct. Unit tests check automatically whether a piece of code behaves as
+expected, and they can be repeated after every change. Testing early is cheaper, because bugs found later cost
+more to fix.</p>
+<p>A unit test checks one method or class in isolation, for example that <code>setLength(10)</code> really changes the length
+of a rectangle. An integration test checks whether several classes work together correctly, such as a <code>Person</code>
+that stores an <code>Address</code>. When an integration test fails, the mistake could be in any of the methods it uses, so
+each class should also have its own unit tests.</p>
+<p>A good test has a clear purpose: one workflow per test method and few assertions, so that the name of a failing
+test already tells you what went wrong. You should test both positive scenarios (good weather), where the
+correct result is expected, and negative scenarios (bad weather), where unexpected input is used or a wrong
+result must not occur. Exceptions are tested with <code>assertThrows</code>. Tests can never prove that code is correct:
+as Dijkstra said, testing shows the presence, not the absence of bugs. Line coverage, for example 80%, shows how
+much code is executed by the tests.</p></div></article><article class="topic" id="t-cc"><h3>Cyclomatic complexity</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is cyclomatic complexity and why does it matter?</q> · <q>How many tests do you need for this method?</q></p><div class="explain"><p>CC = number of linearly independent paths. Quick rule (lecture): count the conditions of <code>if</code>, <code>while</code>, <code>for</code>, … and
+add 1. The course counts <code>if (a || b)</code> as <strong>one</strong> condition (the <code>Person.equals</code> question: 5 <code>if</code>s → 6).</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>CC</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–5</td>
+<td>perfect</td>
+</tr>
+<tr>
+<td>6–10</td>
+<td>hard to understand/test, consider refactoring</td>
+</tr>
+<tr>
+<td>&gt; 30</td>
+<td>extremely complex</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>Number of linearly independent paths through a method</li><li>Quick calculation: number of conditions + 1</li><li>Minimum number of tests to cover every path</li><li>High CC → hard to understand and test → refactor into smaller methods</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Цикломатичната сложност = брой независими пътища = минималният брой тестове. Брои се: условия в if/while/for + 1. Курсът брои <code>if (a || b)</code> като едно условие.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">170 words</span></div><p>Cyclomatic complexity is a measure of how complex a method is: it is the number of linearly independent paths
+through the code. A quick way to calculate it is to count the conditions of the if-statements, loops and other
+branches, and add one. A method without any branch has a complexity of 1; a method with an if and two else-ifs
+has a complexity of 4.</p>
+<p>The measure matters for two reasons. A high cyclomatic complexity makes code hard to understand, because the
+reader must keep many possible paths in mind. It also makes code hard to test, because each path should be
+covered by at least one test: the cyclomatic complexity is the minimum number of tests needed to execute all
+linearly independent paths. A value up to about 5 is considered fine, between 6 and 10 the method should be
+reviewed and possibly refactored, and above 30 it is extremely complex. The usual solution is to split the
+method into smaller methods that each have a single task.</p></div></article><article class="topic" id="t-quality-review"><h3>Code quality and code review</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is the difference between internal and external quality?</q> · <q>What are the goals of code review?</q></p><div class="explain"><p>Rules of thumb: method ≤ 20 lines (&gt; 40 split), no duplicated code (bugs get copied; "late propagation"), low CC,
+short parameter lists (group into objects), code conventions + Javadoc, 80% coverage. Tools: static analysis
+(Checkstyle), project managers. Review flow: commit → pull request → automatic checks → review → merge.</p></div><div class="points"><h4>What graders look for</h4><ul><li>External quality: user view (no crashes, performance)</li><li>Internal quality: developer view (understandable, changeable, testable)</li><li>Rules: short methods, no duplication, low CC, short parameter lists, style/Javadoc, tests</li><li>Code review: someone else examines the code</li><li>Review goals: code quality, find defects, knowledge transfer, comply with QA standards</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Външно качество — за потребителя (без сривове, бързина). Вътрешно — за програмиста (четим, лесен за промяна и тестване). Code review: друг човек преглежда кода, за да намери грешки и да споделят знания.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">189 words</span></div><p>External quality is quality from the user's point of view: the program does not crash, gives correct results and
+performs well. Internal quality is quality from the developer's point of view: the code is understandable, easy
+to change and testable. Internal quality also affects external quality, because testable code is tested better.</p>
+<p>Simple rules help internal quality: keep methods short (up to about 20 lines), avoid duplicated code, because
+copied code also copies bugs and changes are easily forgotten in one of the copies, keep the cyclomatic
+complexity low, group long parameter lists into objects, follow code conventions, use meaningful names and write
+Javadoc. Static analysis tools such as Checkstyle check many of these rules automatically.</p>
+<p>Code review is a quality assurance activity in which one or more people other than the author examine the source
+code, typically in a pull request before it is merged. Its goals are improving the internal quality of the code,
+detecting defects, sharing knowledge about the code base and solutions between reviewers and author, and
+complying with quality guidelines, which is mandatory in safety-critical software. Code review complements unit
+testing and static analysis.</p></div></article><article class="topic" id="t-git"><h3>Version control and Git</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Why use version control?</q> · <q>Explain the Git workflow.</q> · <q>What is a merge conflict?</q></p><div class="explain"><p>working copy → <code>git add</code> → staging area → <code>git commit</code> → local repository → <code>git push</code> → remote repository;
+<code>git pull</code> gets others' changes; <code>git clone</code> copies a remote repo; <code>git checkout File</code> restores the last committed
+version. Git (Linus Torvalds, 2005) stores history as a graph of line-based changes; branches isolate parallel
+work.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Work together, control parallel changes, roll back to earlier versions</li><li>Distributed: local repository + remote repository</li><li>add → staging, commit → local, push → remote, pull ← remote</li><li>Stores increments (efficient for text) instead of full snapshots</li><li>Merge conflict: same lines changed in parallel → developer must decide</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Git: <code>add</code> → staging, <code>commit</code> → локално хранилище, <code>push</code> → сървъра, <code>pull</code> ← от сървъра. Конфликт има, когато двама променят едни и същи редове — решаваш ти.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">207 words</span></div><p>Version control lets developers work together on the same code efficiently, keep control over changes that are
+made in parallel, and roll back to any earlier version. Simple solutions such as file names like
+<code>report_final_final2.doc</code> or Dropbox do not resolve conflicting changes.</p>
+<p>Git is a distributed version control system. Each developer has a working copy of the files and a local
+repository with the full history, and there is a shared remote repository. With <code>git add</code> a new or changed file
+is placed in the staging area. With <code>git commit</code> the staged changes are saved as a new version in the local
+repository. <code>git push</code> sends local commits to the remote repository so collaborators can see them, and
+<code>git pull</code> brings their changes to your computer. <code>git clone</code> creates a local copy of a remote repository, and
+<code>git checkout</code> restores the last committed version of a file. Git stores line-based increments, which is very
+efficient for source code.</p>
+<p>The main challenge is merging parallel changes. When two developers change the same lines, Git cannot merge them
+automatically, even with a three-way merge. It marks the conflict in the file, and a developer has to decide what
+the meaningful result is, for example keeping both versions, before committing.</p></div></article><article class="topic" id="t-libraries"><h3>Libraries vs frameworks; debugging</h3><p class="asks"><span class="lbl">Could be asked as</span><q>What is the difference between a library and a framework?</q> · <q>How do you find a bug with the debugger?</q></p><div class="explain"><div class="tbl"><table>
+<thead>
+<tr>
+<th>Manual coding</th>
+<th>Library</th>
+<th>Framework</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>full control, repetitive work</td>
+<td>you call it (<code>ArrayList</code>, <code>Scanner</code>)</td>
+<td>it dictates the possibilities (JUnit)</td>
+</tr>
+</tbody>
+</table></div></div><div class="points"><h4>What graders look for</h4><ul><li>Library: you call its code when you need it; you keep control</li><li>Framework: defines the structure and calls your code; full workflow support, good if it fits</li><li>Debugging: print statements vs debugger</li><li>Breakpoints, step into / over, inspect variables, conditional breakpoints</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Библиотеката я викаш ти (ArrayList). Framework-ът определя структурата и вика твоя код (JUnit). Дебъгерът спира на breakpoint и можеш да гледаш променливите стъпка по стъпка.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">188 words</span></div><p>A library is a collection of ready-made code that your program calls when it needs it, for example <code>ArrayList</code>,
+<code>Objects</code> or <code>Scanner</code> from the Java standard library. You stay in control of the structure of the program and only
+avoid reinventing the wheel. A framework provides support for a whole workflow and dictates the structure: it
+determines the possibilities and calls your code at the right moments. JUnit is an example: you write methods
+annotated with <code>@Test</code>, and the framework finds and runs them. A framework is very productive when it suits your
+needs, but gives less control.</p>
+<p>A failing test shows that there is a bug, but not where it is. Print statements that show the values of variables
+during execution help, but a debugger is more powerful: you set a breakpoint on a line, run the program in debug
+mode, and it pauses there. You can then inspect all variables, step over a line or step into a method call, and
+continue to the next breakpoint. Conditional breakpoints or hit counts pause only in a specific situation, such as
+when <code>i == 3</code>, which helps with loops.</p></div></article></section><section class="group" id="modernj"><h2>Modern Java</h2><article class="topic" id="t-var"><h3>var: should you use it?</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Explain the keyword <code>var</code>. Should you use it?</q></p><div class="explain"><p><code>var list = new ArrayList&lt;String&gt;();</code> — the type is inferred at compile time and stays fixed.
+Only for local variables with an immediate value; <code>var x;</code> and <code>var f = x -&gt; x + 1;</code> don't compile.</p></div><div class="points"><h4>What graders look for</h4><ul><li>Type inference for local variables (since Java 10)</li><li>Still static typing: type fixed at compile time; compile error if it can't be inferred</li><li>Only local variables, must be initialised</li><li>Pros: less typing, readable with long generic types, easier refactoring; cons: type not visible</li><li>Be consistent within a team</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg"><code>var</code> само извежда типа при компилация — Java остава статично типизиран. Само за локални променливи с начална стойност. Плюс: по-малко писане; минус: типът не се вижда.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">185 words</span></div><p>The keyword <code>var</code>, introduced in Java 10, lets the compiler infer the type of a local variable from the value it
+is initialised with. Instead of <code>ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();</code> you can write
+<code>var list = new ArrayList&lt;String&gt;();</code>. The variable still has a static type: it is determined at compile time and
+cannot change, so <code>var number = 3; number = "hello";</code> does not compile. If the compiler cannot determine the type,
+for example <code>var x;</code> without a value or a lambda without a target type, the program does not compile either.
+<code>var</code> can only be used for local variables that are immediately initialised, not for attributes, parameters or
+return types.</p>
+<p>Whether to use it depends on whom you ask. It saves typing and can make code with long generic types easier to
+read and to refactor. On the other hand, the type is no longer visible in the code, which can make it harder to
+understand; in an IDE such as IntelliJ you can hover over the variable to see it. The most important thing is to
+be consistent and agree on its use within your team.</p></div><p class="avoid"><strong>Avoid:</strong> Don't say <code>var</code> makes Java dynamically typed.</p></article><article class="topic" id="t-enum-switch"><h3>Enums and switch expressions</h3><p class="asks"><span class="lbl">Could be asked as</span><q>Why use an enum instead of a String?</q> · <q>What is the difference between a switch statement and a switch expression?</q></p><div class="explain"><pre><code class="language-java">public enum CardType { NORMAL, RARE, EPIC, LEGENDARY; }
+String m = switch (card.getCardType()) {
+    case NORMAL, RARE, EPIC -&gt; &quot;nothing special.&quot;;
+    case LEGENDARY -&gt; &quot;a legendary!&quot;;
+};
+</code></pre></div><div class="points"><h4>What graders look for</h4><ul><li>Enum: fixed set of named constants; type-safe (typos → compile errors), only valid values</li><li>Can have fields, a (private) constructor and methods; <code>values()</code>, <code>ordinal()</code>, <code>compareTo</code></li><li>Switch statement: needs <code>break</code>, falls through, <code>default</code></li><li>Switch expression: <code>-&gt;</code>, evaluates to a value, no fall-through/<code>break</code>, no <code>default</code> if all cases covered</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Enum вместо String: компилаторът приема само валидни стойности. Switch expression (<code>-&gt;</code>) връща стойност, няма fall-through и <code>break</code>, а <code>default</code> не е нужен, ако всички случаи са покрити.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">181 words</span></div><p>An enum defines a type with a fixed set of named constants, for example <code>enum CardType { NORMAL, RARE, EPIC,
+LEGENDARY }</code>. It is a better alternative to storing such values in a String, because the compiler then only
+accepts valid values: a typo such as <code>"EPICC"</code> in a String goes unnoticed, while <code>CardType.EPICC</code> does not compile.
+Enums can also have attributes, a constructor and methods, for example a description for each card type, and
+their constants have a fixed order, so they can be compared.</p>
+<p>A classic switch statement executes different code depending on a value of a primitive type, String or enum.
+Each case needs a <code>break</code>, otherwise execution falls through into the next case, and a <code>default</code> case handles
+remaining values. A switch expression, written with arrows (<code>case LEGENDARY -&gt; "a legendary!";</code>), evaluates to a
+single value that can be assigned directly to a variable. There is no falling through, so no <code>break</code> is needed,
+and when all possible values are covered, as with all constants of an enum, no <code>default</code> is needed. This makes
+the code shorter and less error-prone.</p></div></article><article class="topic" id="t-comparable"><h3>Comparable vs Comparator</h3><p class="asks"><span class="lbl">Could be asked as</span><q>How can you sort a list of your own objects?</q> · <q>What is the difference between Comparable and Comparator?</q></p><div class="explain"><pre><code class="language-java">public record Person(String name) implements Comparable&lt;Person&gt; {
+    public int compareTo(Person o) { return this.name.compareTo(o.name); }
+}
+Collections.sort(people);                                   // natural order
+people.sort(Comparator.comparing(Person::age).reversed());  // other order
+</code></pre></div><div class="points"><h4>What graders look for</h4><ul><li><code>Collections.sort</code> needs to know the order; built-in for <code>Integer</code>, <code>String</code></li><li><code>Comparable&lt;T&gt;</code>: implemented by the class itself, <code>compareTo(T o)</code>, one natural order</li><li><code>compareTo</code>: negative = this first, 0 = equal, positive = this after</li><li><code>Comparator&lt;T&gt;</code>: separate object/lambda, <code>compare(a, b)</code>; many orders without changing the class</li></ul></div><p class="bg"><span class="bg-tag">БГ</span><span lang="bg">Comparable: класът сам определя естествения си ред чрез <code>compareTo</code> (отрицателно = преди, 0 = равни, положително = след). Comparator: отделно правило отвън — може да имаш много подредби.</span></p><div class="model"><div class="model-head"><h4>Model answer</h4><span class="wc">162 words</span></div><p><code>Collections.sort</code> can sort lists of <code>Integer</code> or <code>String</code> because these classes already define an order. To sort
+objects of your own class, Java must know how two objects compare.</p>
+<p>One way is to let the class implement the interface <code>Comparable&lt;T&gt;</code> and its method <code>compareTo(T o)</code>. The method
+returns a negative number if <code>this</code> should come before <code>o</code>, zero if they are equal in ordering, and a positive
+number if <code>this</code> should come after <code>o</code>. For example, a <code>Person</code> can compare by name with
+<code>return this.name.compareTo(o.name);</code>. This defines the natural order of the class, which <code>Collections.sort(people)</code>
+then uses. A class can only have one natural order.</p>
+<p>A <code>Comparator&lt;T&gt;</code> is a separate object, often a lambda, with a method <code>compare(a, b)</code> following the same sign
+rules. It defines an ordering from outside the class, so you can sort the same objects in different ways without
+changing the class, for example <code>people.sort(Comparator.comparing(Person::age))</code> or with <code>.reversed()</code> for the
+opposite order. Streams use comparators in <code>sorted(...)</code>.</p></div></article></section>
+  </main>
+</div>
+<footer>Made from your 20 lecture PDFs and the grading rubrics of the two WebLab practice exams. Word counts are calculated automatically.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSE1100 Endterm Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: sticky chip bar, each topic a grid of dense cards. Delft-blue ink, ochre accents, teal for Bulgarian notes. */
+:root {
+  --bg: #f4f6fb; --surface: #ffffff; --surface-2: #eaeef7; --ink: #121a2f; --muted: #556079; --line: #d6dcea;
+  --accent: #1f4aa8; --accent-ink: #ffffff; --accent-soft: #e2e9fa;
+  --exam: #5a3ca6; --exam-bg: #f3f0fc; --exam-line: #d9d0f4;
+  --bgnote: #0e6656; --bgnote-bg: #e4f3ef; --bgnote-line: #c3e3da;
+  --code-bg: #eef1f8; --tk-kw: #1f4aa8; --tk-str: #17703f; --tk-num: #8f4510; --tk-com: #6d7590; --tk-fn: #6b35a8; --tk-cls: #9c1f62;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1220; --surface: #141a2c; --surface-2: #1a2137; --ink: #e6e9f3; --muted: #9ea7c0; --line: #29304a;
+  --accent: #8eaefc; --accent-ink: #0d1220; --accent-soft: #1b2849;
+  --exam: #c2b0ff; --exam-bg: #1d1934; --exam-line: #352d5c;
+  --bgnote: #72d6c0; --bgnote-bg: #10261f; --bgnote-line: #1f4338;
+  --code-bg: #10162a; --tk-kw: #8eaefc; --tk-str: #7fd6a1; --tk-num: #f0b07a; --tk-com: #7c85a3; --tk-fn: #d3a5ff; --tk-cls: #ff9bcd;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0d1220; --surface: #141a2c; --surface-2: #1a2137; --ink: #e6e9f3; --muted: #9ea7c0; --line: #29304a;
+  --accent: #8eaefc; --accent-ink: #0d1220; --accent-soft: #1b2849;
+  --exam: #c2b0ff; --exam-bg: #1d1934; --exam-line: #352d5c;
+  --bgnote: #72d6c0; --bgnote-bg: #10261f; --bgnote-line: #1f4338;
+  --code-bg: #10162a; --tk-kw: #8eaefc; --tk-str: #7fd6a1; --tk-num: #f0b07a; --tk-com: #7c85a3; --tk-fn: #d3a5ff; --tk-cls: #ff9bcd;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 40px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.page { max-width: 1240px; margin: 0 auto; }
+.hero { padding: 26px 0 10px; display: grid; gap: 6px; }
+.eyebrow { margin: 0; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--f-display); font-size: clamp(1.8rem, 4.4vw, 2.6rem); line-height: 1.05; margin: 0; letter-spacing: -0.01em; }
+.hero p.lede { margin: 2px 0 0; color: var(--muted); max-width: 72ch; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.links a { text-decoration: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 0.86rem; font-weight: 500; }
+.links a:hover { background: var(--accent-soft); }
+.chips { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; gap: 6px; overflow-x: auto; padding: 10px 0; border-bottom: 1px solid var(--line); scrollbar-width: thin; }
+.chips a { flex: none; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; font-size: 0.84rem; white-space: nowrap; }
+.chips a.is-focus { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chips a:hover { background: var(--accent-soft); }
+.sec { padding-top: 26px; scroll-margin-top: 56px; }
+.sec-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.sec-head h2 { font-family: var(--f-display); font-size: 1.5rem; margin: 0; line-height: 1.15; }
+.chip { background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 1px 8px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.top { margin-left: auto; font-size: 0.8rem; text-decoration: none; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 12px; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px 10px; min-width: 0; }
+.card.wide { grid-column: 1 / -1; }
+.card h3 { font-family: var(--f-display); font-size: 1.02rem; margin: 10px 0 6px; line-height: 1.25; }
+.card p, .card li { margin: 4px 0; }
+.card ul, .card ol { padding-left: 1.2em; margin: 4px 0; }
+.card.exam { background: var(--exam-bg); border-color: var(--exam-line); }
+.card.exam h3 { color: var(--exam); }
+code { font-family: var(--f-mono); font-size: 0.86em; background: var(--surface-2); padding: 0.05em 0.3em; border-radius: 4px; overflow-wrap: anywhere; }
+pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; margin: 8px 0; line-height: 1.45; }
+pre code { background: none; padding: 0; font-size: 0.8rem; white-space: pre; overflow-wrap: normal; color: var(--ink); }
+.token.keyword, .token.boolean { color: var(--tk-kw); font-weight: 600; }
+.token.string, .token.char { color: var(--tk-str); } .token.number { color: var(--tk-num); }
+.token.comment { color: var(--tk-com); font-style: italic; } .token.function { color: var(--tk-fn); }
+.token.class-name, .token.annotation { color: var(--tk-cls); } .token.operator, .token.punctuation { color: var(--muted); }
+.tbl { overflow-x: auto; margin: 6px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+th, td { text-align: left; vertical-align: top; padding: 5px 8px; border-bottom: 1px solid var(--line); }
+th { background: var(--surface-2); font-weight: 600; }
+.card.exam th { background: transparent; }
+tr:last-child td { border-bottom: 0; }
+td code, th code { overflow-wrap: break-word; }
+.bg { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; background: var(--bgnote-bg); border: 1px solid var(--bgnote-line); border-radius: 8px; padding: 7px 10px; margin: 8px 0 2px; font-size: 0.9rem; }
+.bg-tag { font-weight: 700; font-size: 0.72rem; color: var(--bgnote); border: 1px solid var(--bgnote); border-radius: 4px; padding: 0 4px; margin-top: 2px; }
+.qa-hint { color: var(--muted); font-size: 0.85rem; margin: 0 0 6px; }
+.card.check { display: block; }
+.qa { border-top: 1px solid var(--line); }
+.qa summary { cursor: pointer; padding: 6px 0; }
+.qa-a { padding: 0 0 8px 18px; color: var(--accent); font-weight: 500; }
+footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.84rem; }
+</style>
+</head>
+<body>
+<div class="page" id="top">
+  <header class="hero">
+    <p class="eyebrow">Introduction to Programming · TU Delft · Endterm</p>
+    <h1>Endterm cheat sheet</h1>
+    <p class="lede">Everything from the 20 lectures and both practice exams, compressed. Short Bulgarian notes (БГ) on the tricky points.</p>
+    <div class="links"><a href="index.html">Full version with quizzes</a><a href="open-questions.html">Open questions: model answers</a></div>
+  </header>
+  <nav class="chips" aria-label="Sections"><a href="#rules">Rules that cost points</a><a href="#streams" class=is-focus>Lambdas & streams</a><a href="#threads" class=is-focus>Threads</a><a href="#modern" class=is-focus>Modern Java</a><a href="#exceptions">Exceptions</a><a href="#io">Input / output</a><a href="#equality">equals, hashCode, records</a><a href="#collections">Collections & generics</a><a href="#inheritance">Inheritance & polymorphism</a><a href="#classes">Classes, static, memory</a><a href="#arrays">Arrays & container classes</a><a href="#testing">Unit tests</a><a href="#quality">Quality, debugging, code review</a><a href="#design">Program design (exam task)</a><a href="#git">Git commands</a><a href="#basics">Basics</a></nav>
+  <section id="rules" class="sec"><header class="sec-head"><h2>Rules that cost points</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Exam grading (mock exam)</h3><ol>
+<li><strong>Compiles</strong> — otherwise <strong>0 points</strong></li>
+<li>Class design (inheritance, interfaces, composition)</li>
+<li>IO (reading / writing files)</li>
+<li>Data processing</li>
+<li>Tests</li>
+<li>Code style</li>
+</ol>
+<p>Allowed: IntelliJ, slides, Javadoc, offline "Answers EWI". No notes, no internet.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Ако кодът не се компилира — 0 точки за цялата задача. Компилирай след всеки няколко реда.</span></p></div><div class="card"><h3>Compiling</h3><ul>
+<li>Checked exceptions → <code>catch</code> or <code>throws</code></li>
+<li><code>String</code>: <code>length()</code>, <code>charAt(i)</code> · array: <code>.length</code> · <code>List</code>: <code>size()</code>, <code>get(i)</code></li>
+<li><code>split</code> → <code>String[]</code>, not <code>List</code></li>
+<li><code>static</code> method → no <code>this</code>, no instance fields</li>
+</ul></div><div class="card"><h3>Streams &amp; threads</h3><ul>
+<li>No terminal operation → nothing runs. One stream = one use.</li>
+<li><code>count()</code> → <code>long</code> · <code>sum()</code> only on <code>IntStream</code> · <code>max/findFirst/average</code> → Optional</li>
+<li>Method returns <code>Stream</code> → no <code>toList()</code> at the end</li>
+<li><code>Runnable</code> alone starts nothing. <code>Thread.ofPlatform().start(r)</code> → new thread runs <code>r.run()</code></li>
+<li>Thread order never guaranteed · shared data → <code>synchronized</code></li>
+</ul></div><div class="card"><h3>Equality</h3><ul>
+<li><code>==</code> on objects = same address. Use <code>equals</code> (also for Strings)</li>
+<li><code>hashCode</code> uses the same fields as <code>equals</code></li>
+<li>arrays → <code>Arrays.equals</code> · order doesn't matter → <code>HashSet</code></li>
+<li><code>getClass()</code> in <code>equals</code>, not <code>instanceof</code></li>
+</ul></div><div class="card"><h3>Memory &amp; types</h3><ul>
+<li>Objects + all arrays on the heap; variables hold references</li>
+<li>Method can change the object, not the caller's variable</li>
+<li>Autoboxing = primitive → wrapper by Java. <code>Integer</code> ≠ <code>Double</code></li>
+<li>Overloading = static binding · overriding = dynamic binding</li>
+<li>Wrong downcast compiles, then <code>ClassCastException</code></li>
+</ul></div><div class="card"><h3>Tests, exceptions, IO</h3><ul>
+<li>Test stops at first failed assert · <code>assertEquals(expected, actual)</code></li>
+<li><code>assertThrows(X.class, () -&gt; …)</code> passes when X is thrown</li>
+<li>CC = conditions of <code>if/while/for</code> + 1 (<code>if (a || b)</code> counts once)</li>
+<li><code>throws</code> doesn't stop an exception, only <code>catch</code> does</li>
+<li><code>int/0</code> throws, <code>double/0</code> = <code>Infinity</code>, overflow wraps</li>
+<li><code>nextDouble()</code> uses locale, <code>Double.parseDouble</code> needs a dot</li>
+</ul></div></div></section><section id="streams" class="sec"><header class="sec-head"><h2>Lambdas & streams</h2><span class="chip">Focus</span><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Lambdas</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 parameter</td>
+<td><code>x -&gt; x + 1</code></td>
+</tr>
+<tr>
+<td>2 parameters</td>
+<td><code>(x, y) -&gt; x + y</code></td>
+</tr>
+<tr>
+<td>0 parameters</td>
+<td><code>() -&gt; 4</code></td>
+</tr>
+<tr>
+<td>block body</td>
+<td><code>x -&gt; { int y = x * 2; return y; }</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Should be <strong>pure</strong>: same input → same output, change nothing outside.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Ламбдата е малък метод без име. Локални променливи отвън може само да се четат — <code>count++</code> в ламбда не се компилира.</span></p></div><div class="card"><h3>Functional interfaces</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Shape</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Function&lt;T, R&gt;</code></td>
+<td>T → R</td>
+<td><code>apply</code></td>
+</tr>
+<tr>
+<td><code>BiFunction&lt;T, U, R&gt;</code></td>
+<td>T, U → R</td>
+<td><code>apply</code></td>
+</tr>
+<tr>
+<td><code>Predicate&lt;T&gt;</code></td>
+<td>T → boolean</td>
+<td><code>test</code></td>
+</tr>
+<tr>
+<td><code>Supplier&lt;T&gt;</code></td>
+<td>() → T</td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td><code>Consumer&lt;T&gt;</code></td>
+<td>T → void</td>
+<td><code>accept</code></td>
+</tr>
+<tr>
+<td><code>Comparator&lt;T&gt;</code></td>
+<td>T, T → int</td>
+<td><code>compare</code></td>
+</tr>
+<tr>
+<td><code>Runnable</code></td>
+<td>() → void</td>
+<td><code>run</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>In <code>java.util.function</code>. Primitive versions: <code>IntFunction</code>, <code>IntPredicate</code> …</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Всеки интерфейс има свое име на метода: <code>Predicate</code> се вика с <code>test</code>, <code>Function</code> с <code>apply</code>, <code>Supplier</code> с <code>get</code>.</span></p></div><div class="card"><h3>Method references</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Same as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Math::abs</code> (static)</td>
+<td><code>x -&gt; Math.abs(x)</code></td>
+</tr>
+<tr>
+<td><code>Song::getArtist</code> (of the element)</td>
+<td><code>s -&gt; s.getArtist()</code></td>
+</tr>
+<tr>
+<td><code>System.out::println</code> (of an object)</td>
+<td><code>x -&gt; System.out.println(x)</code></td>
+</tr>
+<tr>
+<td><code>ArrayList::new</code> (constructor)</td>
+<td><code>() -&gt; new ArrayList&lt;&gt;()</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Pipeline</h3><p><strong>source</strong> → 0 or more <strong>intermediate</strong> (lazy) → 1 <strong>terminal</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Gives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Stream.of("a", "b")</code></td>
+<td><code>Stream&lt;String&gt;</code></td>
+</tr>
+<tr>
+<td><code>list.stream()</code></td>
+<td><code>Stream&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>Arrays.stream(intArray)</code></td>
+<td><code>IntStream</code></td>
+</tr>
+<tr>
+<td><code>IntStream.range(0, 4)</code></td>
+<td>0 1 2 3</td>
+</tr>
+<tr>
+<td><code>IntStream.rangeClosed(0, 4)</code></td>
+<td>0 1 2 3 4</td>
+</tr>
+<tr>
+<td><code>bufferedReader.lines()</code></td>
+<td><code>Stream&lt;String&gt;</code></td>
+</tr>
+<tr>
+<td><code>IntStream.iterate(0, i -&gt; i + 2)</code></td>
+<td>infinite → <code>limit</code>!</td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Без терминална операция нищо не се изпълнява. Стриймът се ползва само веднъж — втора терминална операция хвърля <code>IllegalStateException</code>.</span></p></div><div class="card"><h3>Intermediate (lazy, return a stream)</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter(x -&gt; cond)</code></td>
+<td>keep where true</td>
+</tr>
+<tr>
+<td><code>map(x -&gt; f(x))</code></td>
+<td>replace each element</td>
+</tr>
+<tr>
+<td><code>mapToInt</code> / <code>mapToDouble</code></td>
+<td>→ primitive stream (for <code>sum</code>, <code>average</code>)</td>
+</tr>
+<tr>
+<td><code>mapToObj</code> / <code>boxed()</code></td>
+<td>primitive → object stream</td>
+</tr>
+<tr>
+<td><code>distinct()</code></td>
+<td>remove duplicates (<code>equals</code>)</td>
+</tr>
+<tr>
+<td><code>sorted()</code> / <code>sorted(cmp)</code></td>
+<td>natural order / comparator</td>
+</tr>
+<tr>
+<td><code>limit(n)</code> / <code>skip(n)</code></td>
+<td>first n / drop first n</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Terminal (end the stream)</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>toList()</code></td>
+<td><code>List&lt;T&gt;</code>, <strong>unmodifiable</strong></td>
+</tr>
+<tr>
+<td><code>collect(Collectors.toList())</code></td>
+<td>modifiable <code>List&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>toArray()</code></td>
+<td>array</td>
+</tr>
+<tr>
+<td><code>count()</code></td>
+<td><strong><code>long</code></strong></td>
+</tr>
+<tr>
+<td><code>sum()</code></td>
+<td><code>int</code>/<code>double</code> — <strong>only <code>IntStream</code>/<code>DoubleStream</code></strong></td>
+</tr>
+<tr>
+<td><code>average()</code></td>
+<td><code>OptionalDouble</code></td>
+</tr>
+<tr>
+<td><code>max()</code> / <code>min()</code></td>
+<td><code>OptionalInt</code>; on <code>Stream&lt;T&gt;</code> with a comparator → <code>Optional&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>findFirst()</code></td>
+<td><code>Optional&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>anyMatch</code> / <code>allMatch</code> / <code>noneMatch</code></td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>forEach(…)</code></td>
+<td><code>void</code></td>
+</tr>
+<tr>
+<td><code>reduce(0, Integer::sum)</code></td>
+<td><code>T</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Loop → stream</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Loop</th>
+<th>Stream</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>if (c) list.add(x)</code></td>
+<td><code>.filter(x -&gt; c)</code></td>
+</tr>
+<tr>
+<td><code>list.add(f(x))</code></td>
+<td><code>.map(x -&gt; f(x))</code></td>
+</tr>
+<tr>
+<td><code>instanceof</code> + cast</td>
+<td><code>.filter(x -&gt; x instanceof R).map(x -&gt; (R) x)</code></td>
+</tr>
+<tr>
+<td><code>count++</code></td>
+<td><code>.count()</code></td>
+</tr>
+<tr>
+<td><code>sum += x</code></td>
+<td><code>.mapToInt(…).sum()</code></td>
+</tr>
+<tr>
+<td>return true if one matches</td>
+<td><code>.anyMatch(…)</code></td>
+</tr>
+<tr>
+<td>first match or default</td>
+<td><code>.findFirst().orElse(d)</code></td>
+</tr>
+<tr>
+<td>stop after n</td>
+<td><code>.limit(n)</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Comparator &amp; Optional</h3><pre><code class="language-java">.sorted(Comparator.comparing(Person::age))             // young → old
+.sorted(Comparator.comparing(Person::age).reversed())  // old → young
+.sorted(Comparator.comparing(Person::age).thenComparing(Person::name))
+.sorted(Comparator.reverseOrder())                     // Z → A
+
+Optional.of(x) / Optional.empty() / Optional.ofNullable(x)
+opt.map(f).orElse(d)    opt.isPresent()   opt.isEmpty()
+opt.get()               // throws NoSuchElementException if empty
+String color = person.getCar().map(Car::getColor).orElse(&quot;none&quot;);
+</code></pre><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>Optional</code> е кутия, която или съдържа стойност, или е празна — така си принуден да обработиш празния случай вместо да получиш <code>NullPointerException</code>.</span></p></div><div class="card wide"><h3>Exam pipelines</h3><pre><code class="language-java">// names with grade &gt;= 6, A–Z
+students.stream().filter(s -&gt; s.getGrade() &gt;= 6).map(Student::getName).sorted().toList();
+// average age of adults, 0 if none
+persons.stream().filter(p -&gt; p.getAge() &gt; 18).mapToInt(Person::getAge).average().orElse(0);
+// any song longer than 300 s?
+songs.stream().anyMatch(s -&gt; s.getDuration() &gt; 300);
+// number of different words, ignoring case
+words.stream().map(String::toLowerCase).distinct().count();      // long
+// first product under 10, or &quot;none&quot;
+products.stream().filter(p -&gt; p.getPrice() &lt; 10).findFirst().map(Product::getName).orElse(&quot;none&quot;);
+// Practice Exam II: names of ReefShelters, return type Stream&lt;String&gt;
+return shelters.filter(s -&gt; s instanceof ReefShelter)
+               .map(s -&gt; (ReefShelter) s)
+               .filter(r -&gt; r.getVolume() &gt;= minVolume)
+               .filter(r -&gt; r.getUniqueCoralTypes() &gt;= minCoralTypes)
+               .map(Shelter::getName);                        // no toList()!
+</code></pre><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Когато методът връща <code>Stream&lt;String&gt;</code>, не слагай <code>toList()</code> накрая. Cast-ът към <code>ReefShelter</code> е нужен, защото <code>Shelter</code> няма <code>getUniqueCoralTypes()</code>. Ако задачата казва „без цикли“ и ползваш цикъл — 0 точки.</span></p></div><div class="card wide check"><h3>Quick check</h3><p class="qa-hint">Answer in your head, then tap to see.</p><details class="qa"><summary><code>IntStream.range(2, 5).sum()</code>?</summary><div class="qa-a">9 (2 + 3 + 4, the end is excluded)</div></details><details class="qa"><summary><code>List.of(5, 3, 5, 1).stream().distinct().sorted().toList()</code>?</summary><div class="qa-a"><code>[1, 3, 5]</code></div></details><details class="qa"><summary><code>s.count(); s.toList();</code> on the same stream?</summary><div class="qa-a">Compiles, then <code>IllegalStateException</code></div></details><details class="qa"><summary><code>Stream&lt;Integer&gt; nums; nums.sum()</code>?</summary><div class="qa-a">Compile error → <code>nums.mapToInt(x -&gt; x).sum()</code></div></details><details class="qa"><summary>Type of <code>IntStream.of(3, 4).max()</code>?</summary><div class="qa-a"><code>OptionalInt</code></div></details><details class="qa"><summary>Type for <code>s -&gt; s.length() &gt; 3</code>?</summary><div class="qa-a"><code>Predicate&lt;String&gt;</code>, called with <code>test</code></div></details><details class="qa"><summary><code>Optional.empty().map(…).orElse("none")</code>?</summary><div class="qa-a"><code>"none"</code></div></details><details class="qa"><summary><code>IntStream.iterate(0, i -&gt; i + 2).limit(3).sum()</code>?</summary><div class="qa-a">6 (0 + 2 + 4)</div></details></div></div></section><section id="threads" class="sec"><header class="sec-head"><h2>Threads</h2><span class="chip">Focus</span><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Process vs thread</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>Process</th>
+<th>Thread</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Is</td>
+<td>a running program</td>
+<td>a line of execution inside a process</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>own, private</td>
+<td>shared with the process</td>
+</tr>
+<tr>
+<td>Count</td>
+<td>many per computer</td>
+<td>many per process; 1 process per thread</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every Java program starts with the <code>main</code> thread.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Процесът е програма със собствена памет. Нишката е „линия на изпълнение“ вътре в процеса и споделя паметта му. Една нишка принадлежи на точно един процес.</span></p></div><div class="card"><h3>Concurrency vs parallelism</h3><ul>
+<li><strong>Concurrency</strong>: many things at the same time</li>
+<li><strong>Parallelism</strong>: one big job split over processors</li>
+</ul>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Hardware</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 core</td>
+<td>interleaving: threads take turns, order not fixed</td>
+</tr>
+<tr>
+<td>&gt; 1 core</td>
+<td>truly in parallel</td>
+</tr>
+<tr>
+<td>hyperthreading</td>
+<td>state parts duplicated, execution units not</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Heisenbug</strong>: bug from wrong expectations about scheduling; appears and disappears.
+Use threads for easily split work: web servers, converting many files, input while loading.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Concurrency е възможно и на едно ядро — нишките просто се редуват (interleaving).</span></p></div><div class="card wide"><h3>Create and start</h3><pre><code class="language-java">public class Task implements Runnable {
+    public void run() { System.out.println(&quot;working&quot;); }
+}
+
+Thread t = Thread.ofPlatform().start(new Task());   // new thread runs run()
+Thread.ofVirtual().start(new Task());
+Thread.ofVirtual().start(() -&gt; System.out.println(&quot;hi&quot;));  // Runnable is functional
+new Thread(new Task()).start();                     // classic way
+t.join();                                           // wait until t is done
+
+try { Thread.sleep(1000); }                         // checked InterruptedException
+catch (InterruptedException e) { }                  // must catch inside run()
+</code></pre></div><div class="card"><h3><code>start</code> vs <code>run</code></h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>You write</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Thread.ofPlatform().start(r)</code></td>
+<td><strong>new</strong> thread runs <code>r.run()</code></td>
+</tr>
+<tr>
+<td><code>r.run()</code></td>
+<td>normal call, same thread</td>
+</tr>
+<tr>
+<td>your own <code>start()</code> in a Runnable</td>
+<td>normal method, <strong>nobody calls it</strong></td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Нишката вижда обекта само като <code>Runnable</code>, а <code>Runnable</code> има само <code>run()</code>. Затова твой метод <code>start()</code> никога не се извиква (задачата с RoadRunner).</span></p></div><div class="card"><h3>Platform vs virtual (Java 21)</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Virtual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>directly on an OS thread</td>
+<td>not directly on an OS thread</td>
+</tr>
+<tr>
+<td>more resources</td>
+<td>fewer resources</td>
+</tr>
+<tr>
+<td>scales OK</td>
+<td>scales very well</td>
+</tr>
+<tr>
+<td>long, heavy tasks</td>
+<td>short, simple tasks</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Race condition</h3><p><code>x = 0</code>, 2 threads each do <code>a = x; a = a + 1; x = a;</code> 10 times.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>T1</th>
+<th>T2</th>
+<th>x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reads 0</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td></td>
+<td>reads 0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>writes 1</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td>writes 1</td>
+<td><strong>1</strong> (lost update)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Result: <strong>≤ 20, never more, never &lt; 0, not predictable.</strong> Order of threads is decided by the scheduler and differs per OS and per run.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>x++</code> е три стъпки: чети, добави, запиши. Ако две нишки прочетат една и съща стойност, едното увеличение се губи.</span></p></div><div class="card"><h3><code>synchronized</code></h3><pre><code class="language-java">public synchronized void increment() { c++; }   // whole method
+public void decrement() {
+    synchronized (this) { c--; }                // only this block
+}
+</code></pre>
+<p>Per <strong>object</strong>: while one thread is in a synchronized method of <code>o</code>, no other thread can enter <strong>any</strong>
+synchronized method of <code>o</code>. Other objects and non-synchronized methods are not blocked.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Ключалката е на обекта, не на класа. Две различни инстанции не се блокират взаимно.</span></p></div><div class="card"><h3>Deadlock</h3><ul>
+<li>T1 in synchronized <code>o1.m1()</code> → calls synchronized <code>o2.m3()</code> → waits for <code>o2</code></li>
+<li>T2 in synchronized <code>o2.m2()</code> → calls synchronized <code>o1.m4()</code> → waits for <code>o1</code></li>
+<li>Both wait forever.</li>
+</ul>
+<p>Avoid: lock objects <strong>in the same order</strong> everywhere, keep synchronized code short.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Deadlock: всяка нишка държи ключалката, която другата чака. Двете чакат вечно.</span></p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Running threads: <code>Thread.ofPlatform().start(new RoadRunner())</code>, RoadRunner has <code>run()</code> and its own <code>start()</code></td><td>Only the 5 "RoadRunner will catch…" lines. No "Beep-beep!"</td></tr><tr><td>To Deadlock or Not: <code>s1.firstStep</code> locks s1 → needs s2; <code>s2.secondStep</code> locks s2 → needs s1</td><td><strong>Deadlock can occur.</strong> Not "at most 2 threads" (main is a thread too), no <code>InterruptedException</code></td></tr><tr><td>One more thing: which are true?</td><td>Concurrent on 1 core ✓ · a process can have many threads ✓ · process = thread ✗ · thread in many processes ✗</td></tr></tbody></table></div></div><div class="card wide check"><h3>Quick check</h3><p class="qa-hint">Answer in your head, then tap to see.</p><details class="qa"><summary>A class implements <code>Runnable</code>. You create an object. New threads?</summary><div class="qa-a">None, until <code>Thread.of…().start(r)</code></div></details><details class="qa"><summary>Two threads do <code>x++</code> 1000× each without sync. Final x?</summary><div class="qa-a">At most 2000, possibly less</div></details><details class="qa"><summary>T1 is in <code>o.a()</code> (synchronized). T2 calls <code>o.b()</code> (synchronized)?</summary><div class="qa-a">T2 waits until T1 leaves</div></details><details class="qa"><summary><code>Thread.sleep(1000);</code> in <code>run()</code> without try/catch?</summary><div class="qa-a">Compile error: unreported <code>InterruptedException</code></div></details><details class="qa"><summary>Many short simple tasks: platform or virtual?</summary><div class="qa-a">Virtual</div></details><details class="qa"><summary>main starts a thread printing A, then prints B. Output?</summary><div class="qa-a">A B or B A — both possible</div></details></div></div></section><section id="modern" class="sec"><header class="sec-head"><h2>Modern Java</h2><span class="chip">Focus</span><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3><code>var</code></h3><p><code>var list = new ArrayList&lt;String&gt;();</code></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type stays static</td>
+<td><code>var n = 3; n = "hi";</code></td>
+</tr>
+<tr>
+<td>local variables only</td>
+<td>fields, parameters, return types</td>
+</tr>
+<tr>
+<td>value required</td>
+<td><code>var x;</code></td>
+</tr>
+<tr>
+<td>type must be inferable</td>
+<td><code>var f = x -&gt; x + 1;</code></td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>var</code> не прави Java динамичен — типът се определя веднъж при компилация и не се сменя.</span></p></div><div class="card"><h3><code>enum</code></h3><pre><code class="language-java">public enum CardType {
+    NORMAL(&quot;white&quot;), RARE(&quot;blue&quot;), EPIC(&quot;purple&quot;), LEGENDARY(&quot;gold&quot;);
+    private final String colour;
+    CardType(String colour) { this.colour = colour; }   // always private
+    public String getColour() { return colour; }
+}
+</code></pre>
+<p><code>values()</code> · <code>valueOf("RARE")</code> · <code>EPIC.ordinal()</code> = 2 · <code>RARE.compareTo(EPIC)</code> &lt; 0 (declaration order) · <code>==</code> is safe</p></div><div class="card"><h3><code>switch</code></h3><pre><code class="language-java">// statement: needs break, falls through without it
+switch (type) {
+    case NORMAL, RARE: msg = &quot;normal&quot;; break;
+    default: msg = &quot;other&quot;;
+}
+// expression: returns a value, no break, ; at the end
+String msg = switch (type) {
+    case NORMAL, RARE, EPIC -&gt; &quot;nothing special&quot;;
+    case LEGENDARY -&gt; &quot;a legendary!&quot;;
+};
+</code></pre>
+<p>Works on <code>int</code>/<code>char</code>/… , <code>String</code>, enums.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">При switch expression (<code>-&gt;</code>) няма fall-through и <code>break</code>. <code>default</code> не е нужен, ако всички случаи на enum-а са покрити.</span></p></div><div class="card"><h3><code>sealed</code> / <code>final</code></h3><pre><code class="language-java">public sealed class Shape permits Circle, Square { }
+public final class Circle extends Shape { }       // no subclasses
+public non-sealed class Square extends Shape { } // open again
+public class Triangle extends Shape { }          // compile error
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Modifier</th>
+<th>Who may extend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td>everyone</td>
+</tr>
+<tr>
+<td><code>sealed … permits</code></td>
+<td>only the listed classes</td>
+</tr>
+<tr>
+<td><code>final</code></td>
+<td>nobody</td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Разликата със <code>final</code>: <code>sealed</code> позволява <strong>някои</strong> изброени подкласове, <code>final</code> — никакви. Точно това търсеха в отворения въпрос.</span></p></div><div class="card"><h3><code>Comparable</code> / <code>Comparator</code></h3><pre><code class="language-java">public record Person(String name, int age) implements Comparable&lt;Person&gt; {
+    public int compareTo(Person o) { return this.name.compareTo(o.name); }
+}
+Collections.sort(people);                         // uses compareTo
+people.sort(Comparator.comparing(Person::age));   // extra order from outside
+Integer.compare(a, b);                            // for numbers
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th><code>compareTo</code> returns</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>negative</td>
+<td><code>this</code> before <code>o</code></td>
+</tr>
+<tr>
+<td>0</td>
+<td>same position</td>
+</tr>
+<tr>
+<td>positive</td>
+<td><code>this</code> after <code>o</code></td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>"Apple".compareTo("Banana")</code> е отрицателно — Apple е преди Banana.</span></p></div><div class="card"><h3>IntelliJ shortcuts</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alt + Insert</td>
+<td>generate constructor, getters, equals, hashCode, toString</td>
+</tr>
+<tr>
+<td>Ctrl + Alt + L</td>
+<td>format code</td>
+</tr>
+<tr>
+<td>Shift Shift</td>
+<td>search everything</td>
+</tr>
+<tr>
+<td>Ctrl + click</td>
+<td>go to definition</td>
+</tr>
+<tr>
+<td><code>psvm</code> / <code>main</code> + Tab</td>
+<td>main method</td>
+</tr>
+<tr>
+<td><code>sout</code> + Tab</td>
+<td><code>System.out.println()</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Sealed (open question, 1 pt)</td><td>Name <strong>which</strong> classes may extend (via <code>permits</code>) and that all others can't — <em>some are allowed</em> (≠ <code>final</code>). Why: control the hierarchy, e.g. <code>Shape</code> only <code>Circle</code> and <code>Square</code>, clients can't add shapes; compiler knows all cases (<code>switch</code>).</td></tr></tbody></table></div></div><div class="card wide check"><h3>Quick check</h3><p class="qa-hint">Answer in your head, then tap to see.</p><details class="qa"><summary><code>var x;</code>?</summary><div class="qa-a">Compile error: needs a value</div></details><details class="qa"><summary>Switch expression covers all enum constants. <code>default</code> needed?</summary><div class="qa-a">No</div></details><details class="qa"><summary><code>compareTo</code> returns 5. Meaning?</summary><div class="qa-a"><code>this</code> comes after the other object</div></details><details class="qa"><summary><code>WARNING.compareTo(ERROR)</code> with <code>enum { INFO, WARNING, ERROR }</code>?</summary><div class="qa-a">Negative (declaration order)</div></details></div></div></section><section id="exceptions" class="sec"><header class="sec-head"><h2>Exceptions</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card wide"><h3>Hierarchy</h3><pre><code class="language-text">Throwable
+├── Error              don't catch: OutOfMemoryError, StackOverflowError
+└── Exception          CHECKED: IOException, FileNotFoundException,
+    │                           InterruptedException, ClassNotFoundException
+    └── RuntimeException   UNCHECKED: NullPointer, Arithmetic, ClassCast,
+                           IndexOutOfBounds, NumberFormat, IllegalArgument
+</code></pre><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Checked = компилаторът те кара да я хванеш (<code>catch</code>) или да я декларираш (<code>throws</code>). Unchecked = наследява <code>RuntimeException</code>, не е задължително.</span></p></div><div class="card"><h3>Causes</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Exception</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NullPointerException</code></td>
+<td><code>null.length()</code></td>
+</tr>
+<tr>
+<td><code>ArithmeticException</code></td>
+<td><code>10 / 0</code> (int)</td>
+</tr>
+<tr>
+<td><code>ArrayIndexOutOfBounds…</code></td>
+<td><code>a[3]</code> on length 3</td>
+</tr>
+<tr>
+<td><code>StringIndexOutOfBounds…</code></td>
+<td><code>"abc".charAt(3)</code></td>
+</tr>
+<tr>
+<td><code>NegativeArraySize…</code></td>
+<td><code>new int[-1]</code></td>
+</tr>
+<tr>
+<td><code>ClassCastException</code></td>
+<td><code>(String) someInteger</code></td>
+</tr>
+<tr>
+<td><code>NumberFormatException</code></td>
+<td><code>Integer.parseInt("abc")</code></td>
+</tr>
+<tr>
+<td><code>StackOverflowError</code></td>
+<td>endless recursion</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Not</strong> exceptions: int overflow (wraps), <code>5.0 / 0</code> = <code>Infinity</code>, <code>0.0 / 0</code> = <code>NaN</code>.</p></div><div class="card"><h3>try / catch / finally</h3><pre><code class="language-java">try {
+    int i = Integer.parseInt(text);   // throws → jump to catch
+} catch (NumberFormatException e) {   // specific BEFORE general
+    System.out.println(e.getMessage());
+} finally {
+    // always runs, even after return: close files, locks
+}
+</code></pre>
+<p><code>catch (Exception)</code> before <code>catch (IOException)</code> → compile error.
+Not caught anywhere → <strong>default exception handler</strong>: stack trace, program ends.</p></div><div class="card"><h3>throws &amp; own exceptions</h3><pre><code class="language-java">public void read() throws IOException { … }      // pass it to the caller
+
+public class DivByZeroException extends Exception {   // checked
+    public DivByZeroException(String s) { super(s); }
+}
+if (d == 0) throw new DivByZeroException(&quot;Divisor cannot be zero&quot;);
+</code></pre>
+<p>Override may throw the <strong>same or narrower</strong> checked exceptions, never broader.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>throws</code> не спира изключението — само го подава нагоре. Спира го само <code>catch</code>.</span></p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Exceptions: <code>new Scanner(new File("names.txt"))</code> / <code>null.length()</code></td><td>Line 1: <strong>checked</strong> (<code>FileNotFoundException</code>) · line 6: <strong>unchecked</strong> (<code>NullPointerException</code>)</td></tr><tr><td>Finally</td><td>Block that always runs after an operation that may throw (the other options are <code>final</code>)</td></tr><tr><td>Testing Exceptional Behaviour: <code>10 / 0</code> in <code>assertThrows</code> and in try/catch + flag</td><td><strong>Both tests pass</strong></td></tr><tr><td>Open: stop <code>ProviderNotFoundException</code> reaching the default handler? Required to compile?</td><td><strong>Catch it</strong> (try/catch here or higher up the call stack). It <strong>extends <code>RuntimeException</code> → unchecked → not required</strong> to compile. Saying <code>throws</code> stops it = −0.5</td></tr></tbody></table></div></div><div class="card wide check"><h3>Quick check</h3><p class="qa-hint">Answer in your head, then tap to see.</p><details class="qa"><summary><code>5.0 / 0</code>?</summary><div class="qa-a"><code>Infinity</code>, no exception</div></details><details class="qa"><summary><code>Integer.MAX_VALUE + 1</code>?</summary><div class="qa-a"><code>-2147483648</code>, no exception</div></details><details class="qa"><summary><code>class E extends Exception</code> — checked?</summary><div class="qa-a">Yes</div></details><details class="qa"><summary><code>return</code> inside <code>try</code> — does <code>finally</code> run?</summary><div class="qa-a">Yes, always</div></details></div></div></section><section id="io" class="sec"><header class="sec-head"><h2>Input / output</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Scanner</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Create</th>
+<th>Reads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new Scanner(new File("f.txt"))</code></td>
+<td>file — <strong>throws checked <code>FileNotFoundException</code></strong></td>
+</tr>
+<tr>
+<td><code>new Scanner("text")</code></td>
+<td>a String</td>
+</tr>
+<tr>
+<td><code>new Scanner(System.in)</code></td>
+<td>keyboard</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hasNextLine()</code></td>
+<td><code>nextLine()</code></td>
+</tr>
+<tr>
+<td><code>hasNext()</code></td>
+<td><code>next()</code> (one token)</td>
+</tr>
+<tr>
+<td><code>hasNextInt()</code></td>
+<td><code>nextInt()</code></td>
+</tr>
+<tr>
+<td><code>hasNextDouble()</code></td>
+<td><code>nextDouble()</code> — <strong>locale!</strong></td>
+</tr>
+<tr>
+<td><code>hasNextBoolean()</code></td>
+<td><code>nextBoolean()</code> — ignores case</td>
+</tr>
+</tbody>
+</table></div>
+<p>Default delimiter: whitespace. <code>useDelimiter(", ")</code> (a regex).</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>nextDouble()</code> зависи от locale-а (чете <code>4,28</code> при холандски), а <code>Double.parseDouble</code> винаги иска точка.</span></p></div><div class="card wide"><h3>File template</h3><pre><code class="language-java">public static List&lt;Shelter&gt; read(String path) throws FileNotFoundException {
+    List&lt;Shelter&gt; result = new ArrayList&lt;&gt;();
+    Scanner sc = new Scanner(new File(path));
+    while (sc.hasNextLine()) {
+        Scanner line = new Scanner(sc.nextLine());  // &quot;Coastal A.1 470 False 40&quot;
+        String type = line.next();
+        String id = line.next();
+        int volume = line.nextInt();
+        boolean free = line.nextBoolean();
+        switch (type) {
+            case &quot;Coastal&quot; -&gt; result.add(new CoastalShelter(id, volume, free, line.nextInt()));
+            case &quot;Tundra&quot;  -&gt; result.add(new TundraShelter(id, volume, free));
+            case &quot;Reef&quot;    -&gt; result.add(new ReefShelter(id, volume, free, line.nextInt()));
+        }
+    }
+    sc.close();
+    return result;
+}
+// &quot;Penguin; 300; Tundra, Coastal&quot;
+String[] p = text.split(&quot;; &quot;);
+int volume = Integer.parseInt(p[1]);
+List&lt;String&gt; types = List.of(p[2].split(&quot;, &quot;));
+</code></pre></div><div class="card"><h3>Splitting</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s.split(" ")</code></td>
+<td><code>String[]</code>; regex → <code>split("\\.")</code> for a dot</td>
+</tr>
+<tr>
+<td>Scanner on a line</td>
+<td><code>next()</code>, <code>nextInt()</code>, <code>useDelimiter</code></td>
+</tr>
+<tr>
+<td><code>StringTokenizer</code></td>
+<td><code>hasMoreTokens()</code>, <code>nextToken()</code></td>
+</tr>
+<tr>
+<td><code>Integer.parseInt</code>, <code>Double.parseDouble</code></td>
+<td>bad input → <code>NumberFormatException</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>java.io families</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Classes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>characters (text)</td>
+<td><code>Reader</code> / <code>Writer</code></td>
+</tr>
+<tr>
+<td>bytes</td>
+<td><code>InputStream</code> / <code>OutputStream</code></td>
+</tr>
+<tr>
+<td>primitives + Strings</td>
+<td><code>DataInputStream</code> / <code>DataOutputStream</code></td>
+</tr>
+<tr>
+<td>whole objects</td>
+<td><code>ObjectInputStream</code> / <code>ObjectOutputStream</code> + <code>Serializable</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>java.io</code>: stream-oriented, blocking · <code>java.nio</code>: block (buffer) oriented, non-blocking</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Reader/Writer = символи (текст). InputStream/OutputStream = байтове (снимки, обекти).</span></p></div><div class="card wide"><h3>Reading &amp; writing text</h3><pre><code class="language-java">try (BufferedReader br = new BufferedReader(new FileReader(&quot;in.txt&quot;))) {
+    String line = br.readLine();
+    while (line != null) {                  // null = end of file
+        line = br.readLine();
+    }
+} catch (IOException e) { }                 // closed automatically
+
+int c = reader.read();                      // one char, -1 = end
+
+PrintWriter w = new PrintWriter(&quot;out.txt&quot;); // FileNotFoundException
+w.println(&quot;text&quot;);
+w.close();                                  // or flush()
+writer.write(message + &quot;\n&quot;);               // Writer: add the newline yourself
+</code></pre>
+<p>BufferedReader = decorator: <strong>is a</strong> Reader, <strong>has a</strong> Reader. Faster than Scanner; Scanner is easier (<code>nextInt</code> …).</p></div><div class="card wide"><h3>Objects to a file</h3><pre><code class="language-java">// your own format: same order when reading!
+out.writeUTF(name);  out.writeDouble(rate);
+String n = in.readUTF(); double r = in.readDouble();
+
+// Serializable: marker interface, 0 methods
+class Table implements Serializable { … }
+new ObjectOutputStream(new FileOutputStream(&quot;t.data&quot;)).writeObject(table);
+Table t = (Table) in.readObject();   // cast + IOException, ClassNotFoundException
+</code></pre>
+<p>Not Serializable → <code>NotSerializableException</code>. <code>System.in</code> (InputStream), <code>System.out</code> / <code>System.err</code> (PrintStream).</p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>IO: read <code>Marmot 4,28</code> with a <code>,</code> locale</td><td>Only <code>sc.next()</code> + <code>sc.nextDouble()</code>. <code>split</code> gives <code>String[]</code> (not <code>List</code>), <code>parseDouble("4,28")</code> throws, <code>(double) sc.next()</code> doesn't compile</td></tr><tr><td>Outputstreams</td><td><code>ObjectOutputStream</code> + <code>Serializable</code>. <code>DataOutputStream</code> only writes primitives/Strings</td></tr><tr><td>writeLogs</td><td><code>logger.write(log.message() + "\n")</code> for logs with <code>level().compareTo(logLevel) &gt;= 0</code>; handle <code>IOException</code></td></tr></tbody></table></div></div><div class="card wide check"><h3>Quick check</h3><p class="qa-hint">Answer in your head, then tap to see.</p><details class="qa"><summary><code>readLine()</code> at end of file?</summary><div class="qa-a"><code>null</code> (<code>read()</code> gives <code>-1</code>)</div></details><details class="qa"><summary>Output doesn't appear in the file?</summary><div class="qa-a">Forgot <code>flush()</code> / <code>close()</code></div></details><details class="qa"><summary><code>"a.b.c".split(".").length</code>?</summary><div class="qa-a">0 — use <code>split("\\.")</code></div></details></div></div></section><section id="equality" class="sec"><header class="sec-head"><h2>equals, hashCode, records</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card wide"><h3>equals + hashCode template</h3><pre><code class="language-java">@Override
+public boolean equals(Object o) {                       // Object, not TVStore!
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    TVStore that = (TVStore) o;
+    return number == that.number                        // primitive: ==
+            &amp;&amp; Objects.equals(name, that.name)          // object: null-safe
+            &amp;&amp; Arrays.equals(tvs, that.tvs);            // array: contents
+}
+@Override
+public int hashCode() {
+    return 31 * Objects.hash(name, number) + Arrays.hashCode(tvs);
+}
+// order doesn't matter: new HashSet&lt;&gt;(list).equals(new HashSet&lt;&gt;(o.list))
+// subclass: ... &amp;&amp; super.equals(o)
+</code></pre><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>hashCode</code> трябва да ползва същите полета като <code>equals</code>. Равни обекти → задължително равни hashCode; обратното не е нужно.</span></p></div><div class="card"><h3>equals contract</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reflexive</td>
+<td><code>x.equals(x)</code></td>
+</tr>
+<tr>
+<td>symmetric</td>
+<td><code>x.equals(y)</code> ⇔ <code>y.equals(x)</code></td>
+</tr>
+<tr>
+<td>transitive</td>
+<td>x=y and y=z → x=z</td>
+</tr>
+<tr>
+<td>consistent</td>
+<td>same answer again</td>
+</tr>
+<tr>
+<td>non-null</td>
+<td><code>x.equals(null)</code> is false</td>
+</tr>
+</tbody>
+</table></div>
+<p>Without your own <code>equals</code>: <code>Object.equals</code> = <code>==</code> (addresses). <code>assertEquals</code> uses <code>equals</code>.</p></div><div class="card"><h3><code>instanceof</code> breaks symmetry</h3><pre><code class="language-java">// Vehicle uses instanceof Vehicle, Train uses instanceof Train
+vehicle.equals(train);   // true  (a Train is a Vehicle)
+train.equals(vehicle);   // false (a Vehicle is not a Train)
+</code></pre>
+<p>With <code>getClass()</code> both are <code>false</code> → symmetric.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Ако родителят ползва <code>instanceof</code>, а детето <code>getClass()</code> (или обратно), <code>p.equals(s)</code> може да е true, а <code>s.equals(p)</code> false — нарушена симетрия.</span></p></div><div class="card"><h3>Records</h3><p><code>public record Person(String name, int age) { }</code> generates:</p>
+<ul>
+<li><code>private final</code> fields → <strong>immutable</strong></li>
+<li>constructor with all fields</li>
+<li>accessors <code>name()</code>, <code>age()</code> — <strong>no <code>get</code></strong></li>
+<li><code>equals</code>, <code>hashCode</code>, <code>toString</code> (<code>Person[name=Ana, age=20]</code>)</li>
+</ul>
+<p>Can: add methods, static fields, override <code>equals</code>, implement interfaces.
+Can't: extend a class, be extended, change fields.</p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Records: which are true?</td><td>Override <code>equals</code> ✓ · only immutable data ✓ · <code>equals</code> generated ✓ · mutable data ✗</td></tr><tr><td>Symmetry: Person uses <code>instanceof</code>, Student uses <code>getClass()</code></td><td>Consistent, reflexive, transitive ✓ · <strong>symmetric ✗</strong></td></tr><tr><td>TVStore equals/hashCode</td><td><code>number ==</code>, <code>Objects.equals(name)</code>, <code>Arrays.equals(tvs)</code> / <code>Arrays.hashCode(tvs)</code></td></tr><tr><td>CardDeck (order doesn't matter)</td><td>Compare <code>new HashSet&lt;&gt;(cardDeck)</code> with <code>new HashSet&lt;&gt;(o.cardDeck)</code> — not with <code>other</code>; same set in <code>hashCode</code></td></tr></tbody></table></div></div><div class="card wide check"><h3>Quick check</h3><p class="qa-hint">Answer in your head, then tap to see.</p><details class="qa"><summary>No <code>equals</code> in Point. <code>new Point(1,2).equals(new Point(1,2))</code>?</summary><div class="qa-a">false (addresses)</div></details><details class="qa"><summary>Compare two <code>int[]</code> fields?</summary><div class="qa-a"><code>Arrays.equals(a, b)</code></div></details><details class="qa"><summary>Name of a record accessor for field <code>name</code>?</summary><div class="qa-a"><code>name()</code></div></details></div></div></section><section id="collections" class="sec"><header class="sec-head"><h2>Collections & generics</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Composition (has-a)</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Relation</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>one-to-one</td>
+<td><code>private Barcode code;</code></td>
+</tr>
+<tr>
+<td>one-to-many</td>
+<td><code>private ArrayList&lt;Product&gt; products;</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Two-way links (Product ↔ Barcode) cause chicken-and-egg constructors → often one direction is enough.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Композиция = „има“ (Product <strong>има</strong> Barcode). Наследяване = „е“ (Student <strong>е</strong> Person).</span></p></div><div class="card"><h3>ArrayList</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add(x)</code>, <code>add(i, x)</code></td>
+<td>append / insert</td>
+</tr>
+<tr>
+<td><code>get(i)</code>, <code>set(i, x)</code></td>
+<td>bad index → <code>IndexOutOfBoundsException</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>not <code>length</code></td>
+</tr>
+<tr>
+<td><code>remove(i)</code>, <code>remove(obj)</code></td>
+<td>by index / by <code>equals</code></td>
+</tr>
+<tr>
+<td><code>contains(x)</code>, <code>indexOf(x)</code></td>
+<td>use <code>equals</code></td>
+</tr>
+<tr>
+<td><code>isEmpty()</code></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Inside: an array that is replaced by a bigger one when full. <code>import java.util.*;</code></p></div><div class="card"><h3>List · Set · Map</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>List</th>
+<th>Set</th>
+<th>Map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order</td>
+<td>fixed</td>
+<td>any</td>
+<td>key → value</td>
+</tr>
+<tr>
+<td>duplicates</td>
+<td>yes</td>
+<td>no</td>
+<td>unique keys</td>
+</tr>
+<tr>
+<td>class</td>
+<td><code>ArrayList</code></td>
+<td><code>HashSet</code></td>
+<td><code>HashMap</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>HashMap</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>put(k, v)</code></td>
+<td><strong>old value</strong>, or <code>null</code> if new key; overwrites</td>
+</tr>
+<tr>
+<td><code>get(k)</code></td>
+<td>value or <code>null</code></td>
+</tr>
+<tr>
+<td><code>getOrDefault(k, d)</code></td>
+<td>value or <code>d</code></td>
+</tr>
+<tr>
+<td><code>containsKey</code>, <code>remove</code>, <code>keySet</code>, <code>values</code></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>HashMap</code> allows <code>null</code> values + 1 <code>null</code> key. <code>set.add(x)</code> → <code>false</code> if already there.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>put</code> връща <strong>старата</strong> стойност (или <code>null</code>, ако ключът е нов) — не новата. Нов ключ с <code>put</code> винаги се добавя успешно.</span></p></div><div class="card"><h3>Generics</h3><pre><code class="language-java">public class Box&lt;T&gt; { private T t; public void add(T t) { this.t = t; } public T get() { return t; } }
+Pair&lt;A, B extends Number&gt;        // bounded: B must be a number
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>benefits</td>
+<td>no casts · errors at <strong>compile time</strong> · less code</td>
+</tr>
+<tr>
+<td>not</td>
+<td>faster · runtime checks</td>
+</tr>
+<tr>
+<td>autoboxing</td>
+<td><code>int</code> ↔ <code>Integer</code> automatically; <code>List&lt;int&gt;</code> impossible</td>
+</tr>
+<tr>
+<td>invariance</td>
+<td><code>List&lt;String&gt;</code> is <strong>not</strong> a <code>List&lt;Object&gt;</code></td>
+</tr>
+<tr>
+<td>type erasure</td>
+<td>type arguments exist only at compile time</td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Type erasure: след компилация <code>List&lt;String&gt;</code> и <code>List&lt;Integer&gt;</code> са един и същ клас — генеричните типове се „изтриват“.</span></p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Autoboxing: <code>add(Double i)</code> — where does it happen?</td><td><code>add(5.0)</code> ✓ and <code>add(new Integer(5).doubleValue())</code> ✓ · <code>null</code>, <code>new Double(4.3)</code> ✗ · <code>new Integer(5)</code> doesn't compile</td></tr><tr><td>Generics benefits</td><td>No casts ✓ · compile-time errors ✓ · less code ✓ · faster ✗ · runtime ✗</td></tr><tr><td>Type erasure</td><td>Generic arguments are compile-time only (not <code>Optional</code>, not <code>var</code>, not catching <code>Exception</code>)</td></tr><tr><td>HashMap 1</td><td>v1 = "South Holland", v2 = <code>null</code>, p1 = "Zuid-Holland" — <code>put</code> returns the old value or <code>null</code></td></tr><tr><td>HashMap 2</td><td>c1 = <code>null</code>, c2 = <code>null</code> — the <code>null</code> from <code>get(1003)</code> is stored, then overwrites 1001</td></tr></tbody></table></div></div></div></section><section id="inheritance" class="sec"><header class="sec-head"><h2>Inheritance & polymorphism</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>extends &amp; constructors</h3><pre><code class="language-java">class Student extends Person {
+    private int nr;
+    public Student(int nr, String name) {
+        super(name);          // FIRST statement
+        this.nr = nr;
+    }
+}
+</code></pre>
+<ul>
+<li>No <code>super(...)</code> → Java adds <code>super()</code> → error if the parent has no no-arg constructor</li>
+<li>Order: parent constructor → subclass fields → rest of the body</li>
+<li><code>super.method()</code> calls the parent's version</li>
+<li>Transitive, no cycles. <strong>Liskov</strong>: a subclass object fits wherever the parent is expected.</li>
+</ul></div><div class="card"><h3>Access</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>class</th>
+<th>package</th>
+<th>subclass</th>
+<th>world</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>none</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><code>private</code></td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Casts</h3><pre><code class="language-java">Account a2 = new SavingsAccount();          // OK, upcast
+SavingsAccount s = new Account();           // compile error
+SavingsAccount s2 = (SavingsAccount) a2;    // OK
+SavingsAccount s3 = (SavingsAccount) a1;    // compiles → ClassCastException
+Button b = (Button) a1;                     // compile error, unrelated
+</code></pre>
+<p>Primitive cast converts (<code>(int) 3.9</code> = 3). Reference cast = "interpret as".</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Компилаторът гледа <strong>декларирания</strong> тип на променливата, а JVM — <strong>реалния</strong> обект. Затова грешен downcast се компилира, но гърми при изпълнение.</span></p></div><div class="card"><h3>Binding</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>Static</th>
+<th>Dynamic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>who</td>
+<td>compiler</td>
+<td>JVM, at runtime</td>
+</tr>
+<tr>
+<td>uses</td>
+<td>declared type</td>
+<td>actual object</td>
+</tr>
+<tr>
+<td>for</td>
+<td>overloading, <code>static</code>, <code>private</code>, <code>final</code></td>
+<td>overriding</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fields are never bound dynamically → don't redefine fields in subclasses.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Overloading (едно име, различни параметри) → статично. Overriding (същият метод в подклас) → динамично.</span></p></div><div class="card"><h3>Abstract class vs interface</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>abstract class</th>
+<th>interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new</code></td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>fields / constructor</td>
+<td>✓</td>
+<td>constants only</td>
+</tr>
+<tr>
+<td>per class</td>
+<td><code>extends</code> 1</td>
+<td><code>implements</code> many</td>
+</tr>
+<tr>
+<td>use</td>
+<td>shared code + state</td>
+<td>a capability</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>public abstract String getClimate();</code> → every subclass must implement it.</p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Binding: completely true?</td><td>Definition ✓ · static binding by compiler, e.g. no inheritance ✓ · dynamic binding "for static overloaded methods" ✗</td></tr><tr><td>Vehicle, infinitely many brands</td><td><code>Vehicle</code> gets a <strong>brand attribute</strong> (not a subclass per brand)</td></tr></tbody></table></div></div></div></section><section id="classes" class="sec"><header class="sec-head"><h2>Classes, static, memory</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>static</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p1.getX()</code></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>Point.staticMethod()</code></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>p1.staticMethod()</code></td>
+<td>✓ warning</td>
+</tr>
+<tr>
+<td><code>Point.getX()</code></td>
+<td><strong>compile error</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Static attribute = one value shared by all objects (e.g. <code>nextFreeNumber</code> counter).</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Static методът няма <code>this</code>, затова не може директно да ползва нестатични полета — не знае на кой обект са.</span></p></div><div class="card"><h3>Stack &amp; heap</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>Heap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local variables, 1 frame per method call</td>
+<td>everything made with <code>new</code></td>
+</tr>
+<tr>
+<td>primitive values</td>
+<td>objects</td>
+</tr>
+<tr>
+<td>references</td>
+<td><strong>all arrays</strong> (also <code>int[]</code>)</td>
+</tr>
+<tr>
+<td>too deep → <code>StackOverflowError</code></td>
+<td>too much → <code>OutOfMemoryError</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Pass by value</h3><pre><code class="language-java">swap(int x, int y)        // copies of values → caller unchanged
+swap(Point p)             // copy of the address → object CAN change
+swap(int[] row) { row = copy(row); … }   // row points elsewhere → caller unchanged
+</code></pre>
+<p><code>==</code> on objects compares addresses. A variable inside <code>{ }</code> dies at the end of the block.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Java винаги копира: при примитиви — стойността, при обекти и масиви — адреса. Методът може да промени обекта, но не и към кое сочи променливата на извикващия.</span></p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Monitor: static getters return instance fields</td><td><strong>Compilation failure in the getters</strong></td></tr><tr><td>Memory: stack vs heap</td><td>Stack: <code>x</code>, <code>y</code>, pointers. Heap: both Points, <strong><code>int[]&lt;1,2,3,4&gt;</code></strong>, <code>Point[]</code> of nulls</td></tr><tr><td>How does memory work: <code>int[] row = copy; row[i] = 0</code></td><td>Prints <code>false</code> — <code>data</code> is wiped through the shared reference</td></tr><tr><td>Open: static from/in static/non-static</td><td>static→static ✓ (utility, <code>Math.max</code>) · non-static from static ✗ directly, only via an object · static from non-static ✓ (constants, counters; careful with shared state) · non-static→non-static ✓ (normal OOP)</td></tr></tbody></table></div></div></div></section><section id="arrays" class="sec"><header class="sec-head"><h2>Arrays & container classes</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Arrays</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int[] a = new int[4];</code></td>
+<td>all 0</td>
+</tr>
+<tr>
+<td><code>int[] b = {1, 4, 8};</code></td>
+<td>with values</td>
+</tr>
+<tr>
+<td>defaults</td>
+<td><code>0</code> · <code>0.0</code> · <code>false</code> · <code>null</code></td>
+</tr>
+<tr>
+<td>indexes</td>
+<td><code>0</code> … <code>length - 1</code></td>
+</tr>
+<tr>
+<td>size</td>
+<td>array <code>.length</code> · String <code>.length()</code> · List <code>.size()</code></td>
+</tr>
+</tbody>
+</table></div></div><div class="card wide"><h3>Patterns</h3><pre><code class="language-java">int max = Integer.MIN_VALUE; for (int v : a) if (v &gt; max) max = v;
+int i = 0; while (i != a.length &amp;&amp; a[i] != x) i++;      // search → i or a.length
+int[] copy = new int[a.length]; for (…) copy[i] = a[i];
+// filter: count matches in temp + counter, then copy to array of that size
+int sum(int i, int[] a) { if (i &gt;= a.length) return 0; return a[i] + sum(i + 1, a); }
+</code></pre>
+<p>No base case → <code>StackOverflowError</code>.</p></div><div class="card wide"><h3>Container class (SpiceRack)</h3><pre><code class="language-java">private String[] items; private int number;
+public Rack() { items = new String[6]; }        // NOT String[] items = …
+add:    if (number &gt;= items.length) full; else items[number++] = x;
+index:  loop i &lt; number, items[i].equals(x) → i, else -1
+remove: i = index(x); shift items[i+1..] left; last = null; number--;
+</code></pre><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Ако в конструктора напишеш <code>String[] items = new String[6];</code>, създаваш нова локална променлива — полето остава <code>null</code> → <code>NullPointerException</code> по-късно.</span></p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>TVStore</td><td><code>new TV[Math.max(0, cap)]</code> · <code>addTV</code>: <code>if (number &gt;= tvs.length) throw new TVStoreIsFullException(); tvs[number] = tv; number++;</code></td></tr></tbody></table></div></div></div></section><section id="testing" class="sec"><header class="sec-head"><h2>Unit tests</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card wide"><h3>JUnit</h3><pre><code class="language-java">import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class RectangleTest {
+    @Test
+    public void testSetLength() {             // public void, not static
+        Rectangle r = new Rectangle(4, 5);
+        r.setLength(10);
+        assertEquals(10, r.getLength());      // (expected, actual)
+    }
+    @Test
+    public void swapEmpty() {
+        assertThrows(IllegalArgumentException.class, () -&gt; swap(new int[]{}));
+    }
+}
+</code></pre></div><div class="card"><h3>Asserts</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Assert</th>
+<th>Passes if</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>assertEquals(exp, act)</code></td>
+<td><code>exp.equals(act)</code></td>
+</tr>
+<tr>
+<td><code>assertEquals(0.3, x, 0.0001)</code></td>
+<td>doubles with tolerance</td>
+</tr>
+<tr>
+<td><code>assertNotEquals</code></td>
+<td>not equal</td>
+</tr>
+<tr>
+<td><code>assertTrue</code> / <code>assertFalse</code></td>
+<td>condition</td>
+</tr>
+<tr>
+<td><code>assertNull</code> / <code>assertNotNull</code></td>
+<td>null check</td>
+</tr>
+<tr>
+<td><code>assertThrows(X.class, () -&gt; …)</code></td>
+<td>X is thrown</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Good tests</h3><ul>
+<li>Good + <strong>bad weather</strong> (<code>assertNotEquals(4, max(5, 3))</code>)</li>
+<li>One workflow per test, few asserts</li>
+<li>Test small parts first, then integration tests</li>
+<li>≥ 80% line coverage; CC = minimum tests for all paths</li>
+<li>"Testing shows the presence, not the absence of bugs"</li>
+</ul><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Тестът спира при първия провален assert — следващите assert-и в него изобщо не се изпълняват.</span></p></div><div class="card wide exam"><h3>From the practice exams</h3><div class="tbl"><table><thead><tr><th>Question</th><th>Right answer</th></tr></thead><tbody><tr><td>Tests… and more tests: which test prints Expected/Actual with both strings?</td><td>Only <strong>test3</strong> (<code>assertEquals(s1, s2)</code>). test1 fails earlier on <code>assertTrue</code></td></tr><tr><td>When can I stop testing: CC of <code>Person.equals</code></td><td><strong>6</strong> = 5 <code>if</code>s + 1 (the <code>||</code> is not counted separately)</td></tr></tbody></table></div></div></div></section><section id="quality" class="sec"><header class="sec-head"><h2>Quality, debugging, code review</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Rules of thumb</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines per method</td>
+<td>≤ 20 OK · &gt; 20 review · &gt; 40 split</td>
+</tr>
+<tr>
+<td>duplicated code</td>
+<td>extract a method / pull up to the parent</td>
+</tr>
+<tr>
+<td>cyclomatic complexity</td>
+<td>0–5 perfect · 6–10 refactor · &gt; 30 extreme</td>
+</tr>
+<tr>
+<td>parameters</td>
+<td>group them into objects</td>
+</tr>
+<tr>
+<td>style</td>
+<td>conventions, names, whitespace, Javadoc</td>
+</tr>
+<tr>
+<td>coverage</td>
+<td>80% lines</td>
+</tr>
+</tbody>
+</table></div>
+<p>External quality = user (no crashes, speed). Internal = developer (readable, changeable, testable).</p></div><div class="card"><h3>Cyclomatic complexity</h3><p><strong>CC = conditions in <code>if</code>/<code>while</code>/<code>for</code>/… + 1</strong></p>
+<pre><code class="language-java">if ((x &gt; 0) &amp;&amp; (y &gt; 0)) …        // 1
+else if ((x &lt; 0) &amp;&amp; (y &gt; 0)) …   // 2
+else if ((x &gt; 0) &amp;&amp; (y &lt; 0)) …   // 3
+else …                           // CC = 4
+</code></pre><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Курсът брои всеки <code>if</code> като едно условие, дори да има <code>&amp;&amp;</code>/<code>||</code> в него. <code>+1</code> го има винаги — метод без <code>if</code> има CC = 1.</span></p></div><div class="card"><h3>Javadoc &amp; debugging</h3><pre><code class="language-java">/** Returns the student with this number.
+ * @param studentNumber the number to look for
+ * @return the student, or null if not found
+ */
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Debugger</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>breakpoint</td>
+<td>pause before the line</td>
+</tr>
+<tr>
+<td>step over / into</td>
+<td>run line / go into the call</td>
+</tr>
+<tr>
+<td>resume</td>
+<td>to next breakpoint</td>
+</tr>
+<tr>
+<td>conditional / hit count</td>
+<td>pause when cond / after n times</td>
+</tr>
+<tr>
+<td>watchpoint</td>
+<td>pause when a field changes</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Code review</h3><p>Someone <strong>other than the author</strong> examines the code.</p>
+<p>Goals: better code quality · find defects · share knowledge · follow QA rules.</p>
+<p>Flow: commit → push → <strong>pull request</strong> → automatic tests/Checkstyle → review → merge.</p>
+<p>Checklist: does what it should? readable? smaller methods / better names? useful comments? testable, enough tests?
+too complex? formatted? single responsibility?</p></div></div></section><section id="design" class="sec"><header class="sec-head"><h2>Program design (exam task)</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>From file to classes</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>In the file</th>
+<th>Goes to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attributes all types share</td>
+<td><code>abstract class Shelter</code></td>
+</tr>
+<tr>
+<td>attributes of one type</td>
+<td>its subclass</td>
+</tr>
+<tr>
+<td>same value for the whole type</td>
+<td><code>static final</code> + abstract getter in the parent</td>
+</tr>
+<tr>
+<td>list of preferred types</td>
+<td><code>List&lt;String&gt;</code> or an <code>enum</code></td>
+</tr>
+<tr>
+<td>all objects</td>
+<td><code>Zoo</code> with lists</td>
+</tr>
+<tr>
+<td>menu</td>
+<td><code>Application</code>; read all files first</td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Общото отива в абстрактен родител, специфичното — в подкласа, а константите за целия тип — като <code>static final</code>.</span></p></div><div class="card"><h3>Menu loop</h3><pre><code class="language-java">Scanner in = new Scanner(System.in);
+boolean running = true;
+while (running) {
+    System.out.println(&quot;1 - Show all shelters\n6 - Stop&quot;);
+    switch (in.nextInt()) {
+        case 1 -&gt; zoo.getShelters().forEach(System.out::println);
+        case 6 -&gt; running = false;
+        default -&gt; System.out.println(&quot;Unknown option&quot;);
+    }
+}
+</code></pre></div><div class="card"><h3>Exam plan</h3><ol>
+<li>Read everything</li>
+<li>Sketch classes</li>
+<li><strong>Compile early, keep compiling</strong></li>
+<li>File reading</li>
+<li>Menu options one by one</li>
+<li>Tests</li>
+<li>Ctrl + Alt + L, names, Javadoc</li>
+<li>Stuck → other part</li>
+</ol></div></div></section><section id="git" class="sec"><header class="sec-head"><h2>Git commands</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card wide"><h3>Where your changes live</h3><p><strong>working copy</strong> → <code>git add</code> → <strong>staging area</strong> → <code>git commit</code> → <strong>local repo</strong> → <code>git push</code> → <strong>remote repo</strong></p>
+<p><code>git pull</code> brings remote changes back to you. Commands marked <em>L</em> were in the lecture.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>commit</code> записва само локално на твоя компютър. Едва <code>push</code> изпраща промените към сървъра (remote), където ги виждат другите.</span></p></div><div class="card"><h3>Start</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git clone &lt;url&gt;</code> <em>L</em></td>
+<td>copy a remote repo + working copy</td>
+</tr>
+<tr>
+<td><code>git init</code></td>
+<td>make the current folder a new repo</td>
+</tr>
+<tr>
+<td><code>git config --global user.name "Mitko"</code></td>
+<td>your name on commits</td>
+</tr>
+<tr>
+<td><code>git config --global user.email "a@b.nl"</code></td>
+<td>your email</td>
+</tr>
+<tr>
+<td><code>git remote -v</code></td>
+<td>show remote addresses</td>
+</tr>
+<tr>
+<td><code>git remote add origin &lt;url&gt;</code></td>
+<td>link a local repo to a remote</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Everyday</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git status</code></td>
+<td>what changed / is staged</td>
+</tr>
+<tr>
+<td><code>git add File.java</code> <em>L</em></td>
+<td>stage one file (new files too)</td>
+</tr>
+<tr>
+<td><code>git add .</code></td>
+<td>stage everything in the folder</td>
+</tr>
+<tr>
+<td><code>git commit -m "msg"</code> <em>L</em></td>
+<td>save staged changes locally</td>
+</tr>
+<tr>
+<td><code>git commit -am "msg"</code></td>
+<td>add + commit tracked files</td>
+</tr>
+<tr>
+<td><code>git push</code> <em>L</em></td>
+<td>send commits to the remote</td>
+</tr>
+<tr>
+<td><code>git push -u origin main</code></td>
+<td>first push of a branch</td>
+</tr>
+<tr>
+<td><code>git pull</code> <em>L</em></td>
+<td>fetch + merge others' changes</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>download, don't merge yet</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Look at history</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git log</code></td>
+<td>list of commits</td>
+</tr>
+<tr>
+<td><code>git log --oneline --graph</code></td>
+<td>compact history as a graph</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>unstaged changes</td>
+</tr>
+<tr>
+<td><code>git diff --staged</code></td>
+<td>staged changes</td>
+</tr>
+<tr>
+<td><code>git show &lt;commit&gt;</code></td>
+<td>one commit in detail</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Undo</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git checkout File.java</code> <em>L</em></td>
+<td>throw away changes, back to last commit</td>
+</tr>
+<tr>
+<td><code>git restore File.java</code></td>
+<td>same, newer command</td>
+</tr>
+<tr>
+<td><code>git restore --staged File.java</code></td>
+<td>unstage, keep the change</td>
+</tr>
+<tr>
+<td><code>git commit --amend</code></td>
+<td>fix the last commit (message/files)</td>
+</tr>
+<tr>
+<td><code>git reset --soft HEAD~1</code></td>
+<td>undo last commit, keep changes</td>
+</tr>
+<tr>
+<td><code>git reset --hard HEAD</code></td>
+<td>delete all uncommitted changes (careful!)</td>
+</tr>
+<tr>
+<td><code>git revert &lt;commit&gt;</code></td>
+<td>new commit that undoes an old one</td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg"><code>git checkout File.java</code> изтрива твоите некомитнати промени по файла — няма връщане назад.</span></p></div><div class="card"><h3>Branches</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git branch</code></td>
+<td>list branches</td>
+</tr>
+<tr>
+<td><code>git branch feature</code></td>
+<td>create a branch</td>
+</tr>
+<tr>
+<td><code>git switch feature</code> / <code>git checkout feature</code></td>
+<td>go to a branch</td>
+</tr>
+<tr>
+<td><code>git switch -c feature</code> / <code>git checkout -b feature</code></td>
+<td>create + go</td>
+</tr>
+<tr>
+<td><code>git merge feature</code></td>
+<td>merge it into the current branch</td>
+</tr>
+<tr>
+<td><code>git branch -d feature</code></td>
+<td>delete a merged branch</td>
+</tr>
+<tr>
+<td><code>git push origin feature</code></td>
+<td>publish the branch → open a pull request</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Other</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git stash</code> / <code>git stash pop</code></td>
+<td>park changes / bring them back</td>
+</tr>
+<tr>
+<td><code>git rm File.java</code></td>
+<td>delete + stage the deletion</td>
+</tr>
+<tr>
+<td><code>git mv Old.java New.java</code></td>
+<td>rename + stage</td>
+</tr>
+<tr>
+<td><code>.gitignore</code></td>
+<td>files Git ignores: <code>*.class</code>, <code>out/</code>, <code>.idea/</code></td>
+</tr>
+<tr>
+<td><code>git tag v1.0</code></td>
+<td>name a commit</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Merge conflict</h3><pre><code class="language-text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+int calc (int a, int b) { return a + b; }
+=======
+int identity (int a) { return a; }
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; better-naming
+</code></pre>
+<ol>
+<li>Open the file, choose what to keep (maybe both)</li>
+<li>Delete the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> lines</li>
+<li><code>git add File.java</code> → <code>git commit</code></li>
+</ol>
+<p>Why VCS: work together, control parallel changes, roll back. Git stores changes (increments), efficient for text.</p><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">Конфликт има, когато двама променят едни и същи редове. Git не решава вместо теб — избираш ти, махаш маркерите, после <code>add</code> и <code>commit</code>.</span></p></div></div></section><section id="basics" class="sec"><header class="sec-head"><h2>Basics</h2><a class="top" href="#top">top ↑</a></header><div class="grid"><div class="card"><h3>Primitive types</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Bits</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>boolean</code></td>
+<td>–</td>
+<td>true / false</td>
+</tr>
+<tr>
+<td><code>byte</code></td>
+<td>8</td>
+<td>−128 … 127</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>16</td>
+<td>−32,768 … 32,767</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>32</td>
+<td>≈ ±2.1 billion</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>64</td>
+<td>≈ ±9.2 × 10^18</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>32</td>
+<td>7 digits exact</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>64</td>
+<td>15 digits exact</td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>16</td>
+<td>one Unicode char</td>
+</tr>
+</tbody>
+</table></div></div><div class="card"><h3>Results to know</h3><div class="tbl"><table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>7 / 2</code> · <code>-7 / 2</code></td>
+<td><code>3</code> · <code>-3</code> (towards 0)</td>
+</tr>
+<tr>
+<td><code>3 / 2.0</code></td>
+<td><code>1.5</code></td>
+</tr>
+<tr>
+<td><code>5 % 3</code> · <code>-5 % 3</code> · <code>5 % -3</code></td>
+<td><code>2</code> · <code>-2</code> · <code>2</code></td>
+</tr>
+<tr>
+<td><code>(int) 3.99</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>Integer.MAX_VALUE + 1</code></td>
+<td><code>-2147483648</code></td>
+</tr>
+<tr>
+<td><code>"a" + 1 + 2</code> · <code>1 + 2 + "a"</code></td>
+<td><code>"a12"</code> · <code>"3a"</code></td>
+</tr>
+<tr>
+<td><code>x != 0 &amp;&amp; 10 / x &gt; 1</code> with x = 0</td>
+<td><code>false</code>, safe (<code>&amp;&amp;</code> is lazy)</td>
+</tr>
+</tbody>
+</table></div><p class="bg"><span class="bg-tag">БГ</span><span class="bg-text" lang="bg">int / int е целочислено деление (7 / 2 = 3). За дробен резултат поне едното число трябва да е <code>double</code>.</span></p></div><div class="card"><h3>Control flow &amp; methods</h3><ul>
+<li><code>&amp;&amp;</code> <code>||</code> lazy · <code>&amp;</code> <code>|</code> both sides · <code>^</code> XOR · <code>!</code> NOT</li>
+<li><code>for</code> · <code>while</code> (0+ times) · <code>do { } while (c);</code> (≥ 1 time)</li>
+<li>classic <code>switch</code> falls through without <code>break</code></li>
+<li>signature = <strong>name + parameter types</strong> (not return type, not parameter names)</li>
+<li><code>void</code> → no value; <code>return;</code> stops early · formal vs actual parameters</li>
+<li>Strings: compare with <code>equals</code>, never <code>==</code></li>
+</ul></div></div></section>
+  <footer>Made from your 20 lecture PDFs and the two WebLab practice exams. Code examples compiled and run with Java 21.</footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+
+</body>
+</html>
